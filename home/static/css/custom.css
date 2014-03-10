@@ -1,0 +1,37 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Fixed NavBar Padding */
+body{ padding-top:70px; }
+
+/* Header */
+
+/* navbar */
+
+/* Custom Border */
+.firstBorder{
+	border-left:1px solid #e7e7e7;	
+}
+	
+.navbar-nav>li{
+	border-right:1px solid #e7e7e7;
+}/* End border */
+
+/* Custom Alignment */
+.navbar-nav>li>a{
+	text-align:center;	
+}
+
+.navbar-nav>li:hover{
+	background-color:#eae9e9; 
+}
+
+.dropdown-menu>li>a{
+	text-align:center;
+}/* End Alignment */
+
+/* Login */
+.hide{
+	display:none;
+}
+
