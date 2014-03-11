@@ -59,8 +59,12 @@ WSGI_APPLICATION = 'soen341.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME'     : 'scheduling_db',
+        'ENGINE'   : 'django.db.backends.mysql',
+        'USER'     : 'soen341',
+        'PASSWORD' : 'D3djrSECVWHrGftQ',
+        'HOST'     : 'localhost',
+        'PORT'     : ''
     }
 }
 
