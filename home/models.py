@@ -27,7 +27,7 @@ class Course(models.Model):
     course_name    = models.CharField(max_length=255, blank=True)
     course_credits = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     description    = models.CharField(max_length=1200, blank=True)
-    program_id     = models.ForeignKey(Program)
+    program        = models.ForeignKey(Program)
     class Meta:
         managed = False
         db_table = 'courses'
@@ -35,8 +35,8 @@ class Course(models.Model):
 # DONE
 class CourseRequisites(models.Model):
     row_id              = models.IntegerField(primary_key=True)
-    course_id           = models.ForeignKey(Course, related_name='+')
-    requisite_course_id = models.ForeignKey(Course, related_name='+')
+    course              = models.ForeignKey(Course, related_name='+')
+    requisite_course    = models.ForeignKey(Course, related_name='+')
     prerequisite        = models.BooleanField()
     class Meta:
         managed = False
@@ -54,11 +54,11 @@ class Term(models.Model):
 #DONE
 class CourseSequence(models.Model):
     row_id     = models.IntegerField(primary_key=True)
-    program_id = models.ForeignKey(Program)
+    program    = models.ForeignKey(Program)
     co_op      = models.BooleanField(db_column='co-op') # Field renamed to remove unsuitable characters.
-    term_id    = models.ForeignKey(Term)
+    term       = models.ForeignKey(Term)
     year       = models.IntegerField()
-    course_id  = models.ForeignKey(Course)
+    course     = models.ForeignKey(Course)
     core       = models.BooleanField()
     class Meta:
         managed = False
@@ -67,8 +67,8 @@ class CourseSequence(models.Model):
 #DONE
 class CourseTerm(models.Model):
     row_id         = models.IntegerField(primary_key=True)
-    course_id      = models.ForeignKey(Course)
-    course_term_id = models.ForeignKey(Term)
+    course         = models.ForeignKey(Course)
+    course_term    = models.ForeignKey(Term)
     year           = models.IntegerField()
     class Meta:
         managed = False
@@ -123,11 +123,11 @@ class ScheduleItemType(models.Model):
 #DONE
 class ScheduleItem(models.Model):
     schedule_item_id = models.IntegerField(primary_key=True)
-    course_id        = models.ForeignKey(Course)
+    course           = models.ForeignKey(Course)
     section          = models.CharField(max_length=2)
-    item_type_id     = models.ForeignKey(ScheduleItemType)
-    instructor_id    = models.ForeignKey(Instructor)
-    location_id      = models.ForeignKey(Location)
+    item_type        = models.ForeignKey(ScheduleItemType)
+    instructor       = models.ForeignKey(Instructor)
+    location         = models.ForeignKey(Location)
     class Meta:
         managed = False
         db_table = 'schedule_items'
@@ -135,11 +135,11 @@ class ScheduleItem(models.Model):
 #DONE
 class ScheduleItemGroup(models.Model):
     row_id      = models.IntegerField(primary_key=True)
-    course_id   = models.ForeignKey(Course)
-    term_id     = models.ForeignKey(Term)
-    lecture_id  = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
-    tutorial_id = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
-    lab_id      = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    course      = models.ForeignKey(Course)
+    term        = models.ForeignKey(Term)
+    lecture     = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    tutorial    = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    lab         = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
     class Meta:
         managed = False
         db_table = 'schedule_item_groups'
@@ -169,7 +169,7 @@ class User(models.Model):
 #DONE
 class UserLogin(models.Model):
     row_id   = models.IntegerField(primary_key=True)
-    user_id  = models.ForeignKey(User)
+    user     = models.ForeignKey(User)
     password = models.CharField(max_length=32)
     class Meta:
         managed = False
@@ -179,8 +179,8 @@ class UserLogin(models.Model):
 #DONE
 class StudentRecord(models.Model):
     row_id  = models.IntegerField(primary_key=True)
-    user_id = models.ForeignKey(User)
-    term_id = models.ForeignKey(Term)
+    user    = models.ForeignKey(User)
+    term    = models.ForeignKey(Term)
     year    = models.IntegerField()
     # TODO - probably should be changed to ForeignKey(Course)
     course_number = models.CharField(max_length=7)
@@ -192,8 +192,8 @@ class StudentRecord(models.Model):
 #DONE
 class StudentSchedule(models.Model):
     row_id           = models.IntegerField(primary_key=True)
-    user_id          = models.ForeignKey(User)
-    schedule_item_id = models.ForeignKey(ScheduleItem)
+    user             = models.ForeignKey(User)
+    schedule_item    = models.ForeignKey(ScheduleItem)
     class Meta:
         managed = False
         db_table = 'student_schedules'

@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+
+{% block title %}Course Selection Page{% endblock %}
+
+{% block content %}
+
+{% for course in courses %}
+
+<div class="container">
+   <h3>{{ course.course_code }} - {{ course.course_name }}</h3>
+   <p>{{ course.description }}</p>
+</div>
+
+{% endfor %}
+
+{% endblock %}
