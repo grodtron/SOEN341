@@ -1,20 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+from django.contrib.auth.decorators import login_required
+
 from home.models import Course
 
+from login import login_view
+
 def index(request):
-    context = {
-        "logged_in" : True
-    }
-    return render(request, 'home/base.html', context)
+   if request.user.is_authenticated():
+      return render(request, 'home/base.html', {})
+   else:
+      return login_view(request)
 
+
+@login_required
 def student_record(request):
-    context = {
-        "logged_in" : True
-    }
-    return render(request, 'home/student-record.html', context)
+    return render(request, 'home/student-record.html', {})
 
+@login_required
 def course_selection(request):
 
     soencourses = Course.objects.filter(
@@ -27,7 +31,6 @@ def course_selection(request):
 
     context = {
         "courses"   : list(soencourses[:5]),
-        "logged_in" : True
     }
 
     return render(request, 'home/course-selection.html', context)

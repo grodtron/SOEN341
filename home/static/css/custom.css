@@ -29,10 +29,23 @@ body{ padding-top:70px; }
 .dropdown-menu>li>a{
 	text-align:center;
 }/* End Alignment */
+/* End navbar */
+/* End Header */
 
-/* Login */
-.hide{
-	display:none;
+
+/*  Registration container*/
+.register{
+	background-color:#f8f8f8;
+	margin-top:70px;
+	padding:20px;
+	max-width:800px;
+	border:1px solid #eee;
+}
+
+/* Registration Form */
+.first{
+	max-width:49%;
+	display:inline;
 }
 
 /* Course Details */
@@ -49,3 +62,16 @@ body{ padding-top:70px; }
 	float:right;
 }
 /* End Course Details */
+.last{
+	max-width:49%;
+	display:inline;
+	float:right;
+}/* End Registration Form */
+/* End Registration */
+
+
+input:required:valid {
+	box-shadow: 0px 0px 7px #00FF00 ;
+	border:1px solid #00CC00; 
+	-moz-box-shadow: none;
+}
