@@ -1,7 +1,39 @@
 {% extends "home/base.html" %}
 
 {% block content %}
+<div class="container studentRecordContainer">
+	<h1 class="inline">Student Record :</h1>
+	<h2 class="inline">{{ user.username }} </h2>
 
-<h1>A+ In everything !!</h1>
+	<form class="form-inline inline" role="form" action="" method="get">
+		<div class="form-group right">
+			<label class="control-label inline studentRecordLabel">Term:</label>
+			<select class="form-control">
+				{% for term in terms %}
+				<option value="{{term.term_id}}">{{term.term_name}}</option>
+				{% endfor %}
+			</select>
+			<label class="control-label inline studentRecordLabel">Year:</label>
+			<select class="form-control">
+				{% for year in years%}
+				<option value="{{year}}">{{year}}</option>
+				{% endfor%}
+			</select>
+		</div>
+	</form>
+	
+	<div class="container studentRecordInfoContainer">
+		
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Student Name</td>
+					<td>Program</td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 
 {% endblock %}
