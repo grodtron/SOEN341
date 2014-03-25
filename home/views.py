@@ -42,4 +42,13 @@ def course_selection(request):
 
     return render(request, 'home/course-selection.html', context)
 
+@login_required
+def edit_student_record(request):
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request , 'home/student-record-edit.html' , context)
 

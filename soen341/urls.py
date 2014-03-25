@@ -13,5 +13,5 @@ urlpatterns = patterns('',
     url(r'^do-login$', 'home.login.do_login', name='do login'),
     url(r'^do-logout$', 'home.login.do_logout', name='do logout'),
     url(r'^do-register$', 'home.login.do_register', name='do register'),
-    
+    url(r'^edit-student-record$', 'home.views.edit_student_record' , name='edit-student-record'),
 )

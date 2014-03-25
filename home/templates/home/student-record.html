@@ -4,6 +4,8 @@
 <div class="container studentRecordContainer">
 	<h1 class="inline">Student Record :</h1>
 	<h2 class="inline">{{ user.username }} </h2>
+	<a href="/edit-student-record"><button class="btn btn-default editBtn">Edit</button></a>
+	
 
 	<form class="form-inline inline" role="form" action="" method="get">
 		<div class="form-group right">
@@ -24,13 +26,38 @@
 	
 	<div class="container studentRecordInfoContainer">
 		
-		<table class="table">
+		<table class="table table-striped">
 			<tbody>
 				<tr>
-					<td>Student Name</td>
-					<td>Program</td>
+					<td><strong>Student Name</strong></td>
+					<td>{{ user.first_name }} {{ user.last_name }}</td>
+					<td></td>
 					<td></td>
 				</tr>
+				<tr>
+					<td><strong>Program</strong></td>
+					<td>test</td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td><strong>Credits Required</strong></td>
+					<td>test</td>
+					<td><strong>Credits Earned</strong></td>
+					<td>test</td>
+				</tr>
+				 <tr>
+		            <td><strong>Last Annual GPA</strong></td>
+		            <td>test</td>
+		            <td><strong>Cumulative GPA</strong></td>
+		            <td>test</td>
+		        </tr>
+		        <tr>
+		            <td><strong>Final GPA in Program</strong></td>
+		            <td>Will be Determined at Graduation</td>  
+		            <td></td>
+		            <td></td>
+		        </tr>
 			</tbody>
 		</table>
 	</div>
