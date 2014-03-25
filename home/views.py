@@ -51,10 +51,19 @@ def course_details(request):
         course_name__exact="None",
         description__exact="None"
     )
-        
 
     context = {
         "courses"   : list(soencourses[:5]),
         "logged_in" : True
     }
     return render(request, 'home/course-details.html', context)
+        
+@login_required
+def edit_student_record(request):
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request , 'home/student-record-edit.html' , context)
