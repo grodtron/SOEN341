@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course
+from home.models import Course, Term
 
 from login import login_view
 
@@ -16,7 +16,14 @@ def index(request):
 
 @login_required
 def student_record(request):
-    return render(request, 'home/student-record.html', {})
+
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request, 'home/student-record.html', context)
 
 @login_required
 def course_selection(request):
@@ -35,6 +42,7 @@ def course_selection(request):
 
     return render(request, 'home/course-selection.html', context)
 
+@login_required
 def course_details(request):
 
     soencourses = Course.objects.filter(

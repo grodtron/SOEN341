@@ -75,3 +75,30 @@ input:required:valid {
 	border:1px solid #00CC00; 
 	-moz-box-shadow: none;
 }
+
+/* Student Record */
+.studentRecordContainer{
+	width:100%;
+	padding-left:70px;
+	padding-top:30px;
+	padding-right:70px;
+}
+
+.inline{
+	display:inline;
+}
+
+.right{
+	float:right;
+}
+
+.studentRecordLabel{
+	padding-right:15px;
+	padding-left:20px;
+}
+
+.studentRecordInfoContainer{
+	width:100%;
+	padding-left:100px;
+	padding-top:60px;
+}
