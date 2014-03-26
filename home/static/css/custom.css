@@ -69,12 +69,25 @@ input:required:valid {
 	padding-top:30px;
 	padding-right:70px;
 }
+/* Course Details */
+.course-details-content {
+	width: 75%;
+	float:left;
+	margin-right:5%;
+}
 
 .inline{
 	display:inline;
 }
+.course-details-sidebar{
+	float:left;
+	width:20%;
+}
 
 .right{
+	float:right;
+}
+#course-details .dropButton {
 	float:right;
 }
 
