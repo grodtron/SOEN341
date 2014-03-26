@@ -35,3 +35,17 @@ body{ padding-top:70px; }
 	display:none;
 }
 
+/* Course Details */
+.course-details-content {
+	width: 75%;
+	float:left;
+	margin-right:5%;
+}
+.course-details-sidebar{
+	float:left;
+	width:20%;
+}
+#course-details .dropButton {
+	float:right;
+}
+/* End Course Details */
