@@ -9,5 +9,5 @@ urlpatterns = patterns('',
     url(r'^$', 'home.views.index', name='home'),
     url(r'^student-record$', 'home.views.student_record', name='student-record'),
     url(r'^course-selection$', 'home.views.course_selection', name='course-selection'),
-    
+    url(r'^course-details$', 'home.views.course_details', name='course-details'),
 )

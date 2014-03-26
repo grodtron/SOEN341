@@ -1,0 +1,59 @@
+{% extends "home/base.html" %}
+
+{% block title %}Course Details Page{% endblock %}
+
+{% block content %}
+
+<script>
+function dropDown(field) {
+	var fieldName = field;
+	if(document.getElementById(field).style.display == "none")
+		document.getElementById(field).style.display = "block";
+	else
+		document.getElementById(field).style.display = "none";
+}
+</script>
+
+<div class="container">
+	<div id="course-details">
+		<div class="course-details-content">
+			<p>Course Selection >> Course Details Page</p>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<td>
+						<h3>{{ courses.1.course_code }} - {{ courses.1.course_name }}
+							<button id="drop-down" class="btn dropButton" onclick="dropDown('cDescription')"> View more</button>
+						</h3>
+					</td>
+				<tr id="cDescription" style="display:none">
+					<td>
+						<p>{{courses.1.description}}</p>
+					</td>
+				</tr>
+			</table>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<td>
+						<p>The other info</p>
+					</td>
+					<td>
+						<p>The other info</p>
+					</td>
+					<td>
+						<p>The other info</p>
+					</td>
+					<td>
+						<p>The other info</p>
+					</td>
+				</tr>
+			</table>
+			<a href="course-selection"><button class="btn">Back to Course List</button>
+			</a>
+		</div>
+		<div class="course-details-sidebar">
+			<p> I don't know, the side shit that was on the prototype</p>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
