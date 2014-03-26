@@ -6,11 +6,24 @@
 
 <script>
 function dropDown(field) {
-	var fieldName = field;
 	if(document.getElementById(field).style.display == "none")
 		document.getElementById(field).style.display = "block";
 	else
 		document.getElementById(field).style.display = "none";
+}
+
+function dropDownAndHide(field1,field2) {
+	if(document.getElementById(field1).style.display == "none") {
+		document.getElementById(field1).style.display = "table-row";
+	} else {
+		document.getElementById(field1).style.display = "none";
+	}
+	
+	if(document.getElementById(field2).style.display == "none") {
+		document.getElementById(field2).style.display = "table-cell";
+	} else {
+		document.getElementById(field2).style.display = "none";
+	}
 }
 </script>
 
@@ -22,7 +35,7 @@ function dropDown(field) {
 				<tr>
 					<td>
 						<h3>{{ courses.1.course_code }} - {{ courses.1.course_name }}
-							<button id="drop-down" class="btn dropButton" onclick="dropDown('cDescription')"> View more</button>
+							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
 				<tr id="cDescription" style="display:none">
@@ -33,20 +46,71 @@ function dropDown(field) {
 			</table>
 			<table class="table table-striped table-bordered">
 				<tr>
-					<td>
-						<p>The other info</p>
+					<td id="ddTeachers">
+						<h4>Teachers
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="&#8711;"/>
+						</h4>
 					</td>
-					<td>
-						<p>The other info</p>
+					<td id="ddSections">
+						<h4>Sections
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="&#8711;"/>
+						</h4>
 					</td>
-					<td>
-						<p>The other info</p>
+					<td id="ddCredits">
+						<h4>Credits
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="&#8711;"/>
+						</h4>
 					</td>
-					<td>
-						<p>The other info</p>
+					<td id="ddPrereq">
+						<h4>Prerequisites
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="&#8711;"/>
+						</h4>
+					</td>
+					<td id="ddCoreq">
+						<h4>Corequisites
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="&#8711;"/>
+						</h4>
 					</td>
 				</tr>
 			</table>
+			<table class="table table-striped table-bordered">
+				<tr id="cTeachers" style="display:none;">
+					<td class="course-details-content-width">
+						<p><em>Teachers:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="hide"/>
+						</p>
+					</td>
+				</tr>
+				<tr id="cSections" style="display:none">
+					<td class="course-details-content-width">
+						<p><em>Sections:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
+						</p>
+					</td>
+				</tr>
+				<tr id="cCredits" style="display:none">
+					<td class="course-details-content-width">
+						<p><em>Credits:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="hide"/>
+						</p>
+					</td>
+				</tr>
+				<tr id="cPrereq" style="display:none">
+					<td class="course-details-content-width">
+						<p><em>Prerequisites:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="hide"/>
+						</p>
+					</td>
+				</tr>
+				<tr id="cCoreq" style="display:none">
+					<td class="course-details-content-width">
+						<p><em>Corequisites:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+							<input type="button" class="btn moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="hide"/>
+						</p>
+					</td>
+				</tr>
+			</table>
+			</br>
 			<a href="course-selection"><button class="btn">Back to Course List</button>
 			</a>
 		</div>
