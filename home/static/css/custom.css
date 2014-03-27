@@ -109,6 +109,20 @@ input:required:valid {
 	width:855px;
 }
 
+.course-details-button-list {
+	list-style-type:none;
+	margin:0;
+	padding:0
+}
+
+.course-details-button-list li{
+	display:inline;
+}
+
+#course-details-buttons {
+	float: left;
+}
+
 /* End Course Details */
 
 .editBtn{

@@ -20,7 +20,7 @@ function dropDownAndHide(field1,field2) {
 	}
 	
 	if(document.getElementById(field2).style.display == "none") {
-		document.getElementById(field2).style.display = "table-cell";
+		document.getElementById(field2).style.display = "inline-block";
 	} else {
 		document.getElementById(field2).style.display = "none";
 	}
@@ -44,67 +44,47 @@ function dropDownAndHide(field1,field2) {
 					</td>
 				</tr>
 			</table>
-			<table class="table table-striped table-bordered">
-				<tr>
-					<td id="ddTeachers">
-						<h4>Teachers
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="&#8711;"/>
-						</h4>
-					</td>
-					<td id="ddSections">
-						<h4>Sections
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="&#8711;"/>
-						</h4>
-					</td>
-					<td id="ddCredits">
-						<h4>Credits
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="&#8711;"/>
-						</h4>
-					</td>
-					<td id="ddPrereq">
-						<h4>Prerequisites
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="&#8711;"/>
-						</h4>
-					</td>
-					<td id="ddCoreq">
-						<h4>Corequisites
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="&#8711;"/>
-						</h4>
-					</td>
-				</tr>
-			</table>
+			<div id="course-details-buttons">
+				<ul class="course-details-button-list">
+					<li id="ddTeachers"><input type="button" class="btn" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="Teachers"/></li>
+					<li id="ddSections"><input type="button" class="btn" onclick="dropDownAndHide('cSections','ddSections')" value="Sections"/></li>
+					<li id="ddCredits"><input type="button" class="btn" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="Credits"/></li>
+					<li id="ddPrereq"><input type="button" class="btn" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="Prerequisites"/></li>
+					<li id="ddCoreq"><input type="button" class="btn" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="Corequisites"/></li>
+				</ul>
+			</div>
 			<table class="table table-striped table-bordered">
 				<tr id="cTeachers" style="display:none;">
 					<td class="course-details-content-width">
-						<p><em>Teachers:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em>Teachers:</em> TEST
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="hide"/>
 						</p>
 					</td>
 				</tr>
 				<tr id="cSections" style="display:none">
 					<td class="course-details-content-width">
-						<p><em>Sections:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em>Sections:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
 						</p>
 					</td>
 				</tr>
 				<tr id="cCredits" style="display:none">
 					<td class="course-details-content-width">
-						<p><em>Credits:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em>Credits:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="hide"/>
 						</p>
 					</td>
 				</tr>
 				<tr id="cPrereq" style="display:none">
 					<td class="course-details-content-width">
-						<p><em>Prerequisites:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em>Prerequisites:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="hide"/>
 						</p>
 					</td>
 				</tr>
 				<tr id="cCoreq" style="display:none">
 					<td class="course-details-content-width">
-						<p><em>Corequisites:</em>TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em>Corequisites:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
 							<input type="button" class="btn moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="hide"/>
 						</p>
 					</td>
