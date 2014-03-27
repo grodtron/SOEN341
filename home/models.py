@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from django.contrib.auth.models import User
+
 class Program(models.Model):
     program_id      = models.IntegerField(primary_key=True)
     program_name    = models.CharField(max_length=32)
@@ -20,6 +22,11 @@ class Course(models.Model):
     class Meta:
         managed = False
         db_table = 'courses'
+
+class ShoppingCart(models.Model):
+   row_id      = models.IntegerField(primary_key=True)
+   course      = models.ManyToManyField(Course)
+   user        = models.OneToOneField(User)
 
 class CourseRequisites(models.Model):
     row_id              = models.IntegerField(primary_key=True)
@@ -138,28 +145,6 @@ class ScheduleItemTime(models.Model):
     class Meta:
         managed = False
         db_table = 'schedule_item_times'
-
-
-class User(models.Model):
-    user_id    = models.IntegerField(primary_key=True)
-    user_fname = models.CharField(max_length=32)
-    user_lname = models.CharField(max_length=32)
-    user_email = models.CharField(max_length=32)
-    credits_earned = models.IntegerField()
-    class Meta:
-        managed = False
-        db_table = 'users'
-
-
-class UserLogin(models.Model):
-    row_id   = models.IntegerField(primary_key=True)
-    user     = models.ForeignKey(User)
-    password = models.CharField(max_length=32)
-    class Meta:
-        managed = False
-        db_table = 'user_logins'
-
-
 
 class StudentRecord(models.Model):
     row_id  = models.IntegerField(primary_key=True)
