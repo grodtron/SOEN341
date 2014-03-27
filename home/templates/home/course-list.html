@@ -1,0 +1,28 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Department Of Engineering & Computer Science <small>Concordia University</small></h1>
+</div>
+
+<div class="container">
+	<div class="row">
+		<h2>Programs:</h2>
+	</div>
+	<div class="row">
+	{% for program in programs %}
+	<div class="col-md-1">
+		<div class="dropdown">
+			<a data-toggle="dropdown" href="#">{{program.program_name}}</a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+			{% for course in courses %}
+			<li><a href="http://192.168.56.128:8000/course-selection/{{course.course_name}}.html">{{course.course_name}}</a></li>
+			{% endfor %}
+			</ul>
+		</div>	
+	</div>
+	{% endfor %}
+	</div>
+</div>
+
+{% endblock %}
