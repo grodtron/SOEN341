@@ -28,16 +28,13 @@ def student_record(request):
 @login_required
 def course_selection(request):
 
-    soencourses = Course.objects.filter(
-        course_code__startswith="COEN"
-    ).exclude(
+    soencourses = Course.objects.exclude(
         course_name__exact="None",
         description__exact="None"
-    )
-        
+    ).order_by('course_code')
 
     context = {
-        "courses"   : list(soencourses[:5]),
+        "courses"   : list(soencourses),
     }
 
     return render(request, 'home/course-selection.html', context)
