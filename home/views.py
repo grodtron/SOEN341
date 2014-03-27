@@ -44,11 +44,20 @@ def course_selection(request):
 
 @login_required
 def edit_student_record(request):
+
   allterms = Term.objects.all()
   allyears = range(2010,2015)
+  try:
+      allstudentrecords = StudentRecord.Objects.all()
+  except NameError:
+      allstudentrecords = None
+
+
+  
   context = {
     "terms" : list(allterms),
-    "years" : list(allyears)
+    "years" : list(allyears),
+    "studentrecords" : allstudentrecords
   }
   return render(request , 'home/student-record-edit.html' , context)
 
