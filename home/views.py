@@ -1,20 +1,31 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
-from home.models import Course
+from django.contrib.auth.decorators import login_required
+
+from home.models import Course, Term
+
+from login import login_view
 
 def index(request):
-    context = {
-        "logged_in" : True
-    }
-    return render(request, 'home/base.html', context)
+   if request.user.is_authenticated():
+      return render(request, 'home/base.html', {})
+   else:
+      return login_view(request)
 
+
+@login_required
 def student_record(request):
-    context = {
-        "logged_in" : True
-    }
-    return render(request, 'home/student-record.html', context)
 
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request, 'home/student-record.html', context)
+
+@login_required
 def course_selection(request):
 
     soencourses = Course.objects.filter(
@@ -27,23 +38,43 @@ def course_selection(request):
 
     context = {
         "courses"   : list(soencourses[:5]),
-        "logged_in" : True
     }
 
     return render(request, 'home/course-selection.html', context)
 
+@login_required
 def course_details(request):
-
+	
+    current_course_id = "54"
+	
     soencourses = Course.objects.filter(
-        course_code__startswith="COEN"
+        course_id__exact=current_course_id
     ).exclude(
         course_name__exact="None",
         description__exact="None"
     )
-        
 
     context = {
-        "courses"   : list(soencourses[:5]),
-        "logged_in" : True
+        "course"   : list(soencourses[:1])
     }
     return render(request, 'home/course-details.html', context)
+        
+@login_required
+def edit_student_record(request):
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request , 'home/student-record-edit.html' , context)
+
+@login_required
+def edit_student_record(request):
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request , 'home/student-record-edit.html' , context)
