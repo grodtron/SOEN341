@@ -9,7 +9,9 @@ urlpatterns = patterns('',
     url(r'^$', 'home.views.index', name='home'),
     url(r'^student-record$', 'home.views.student_record', name='student-record'),
     url(r'^course-selection$', 'home.views.course_selection', name='course-selection'),
-    url(r'^course-details$', 'home.views.course_details', name='course-details'),
+
+    url(r'^course-details/([A-Z]{4}[0-9]{3})$', 'home.views.course_details', name='course-details'),
+
     url(r'^login$', 'home.login.login_view', name='login'),
     url(r'^do-login$', 'home.login.do_login', name='do login'),
     url(r'^do-logout$', 'home.login.do_logout', name='do logout'),

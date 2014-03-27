@@ -43,19 +43,14 @@ def course_selection(request):
     return render(request, 'home/course-selection.html', context)
 
 @login_required
-def course_details(request):
+def course_details(request, course_code):
 	
-    current_course_id = "54"
-	
-    soencourses = Course.objects.filter(
-        course_id__exact=current_course_id
-    ).exclude(
-        course_name__exact="None",
-        description__exact="None"
+    course = Course.objects.filter(
+        course_code__exact=course_code
     )
 
     context = {
-        "course"   : list(soencourses[:1])
+        "course"  : course[0]
     }
     return render(request, 'home/course-details.html', context)
         
