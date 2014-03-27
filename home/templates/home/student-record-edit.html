@@ -4,7 +4,36 @@
 <div class="container studentRecordContainer">
 	<h1 class="inline">Student Record :</h1>
 	<h2 class="inline">{{ user.username }} </h2>
-	<button class="btn btn-default editBtn">Edit</button>
+	<button class="btn btn-success right">Save</button>
+	
+	
+
 </div>
+
+<div class="container studentRecordInfoContainer">
+	<h3 class='inline'>Student Record on File</h3>
+	
+	{% if studentrecords == None %}
+		<h4>No Data</h4>
+	{% else %}
+		<h4>Data</h4>
+	{% endif %}
+
+	<h3 class="inline">Add Term</h3>
+	<form class="form-inline inline" role="form" action="" method="get">
+		<div class="form-group">
+			<label class="control-label inline studentRecordLabel">Term:</label>
+			<select class="form-control">
+				<option value="">test</option>
+			</select>
+			<label class="control-label inline studentRecordLabel">Year:</label>
+			<select class="form-control">
+				<option value="">test</option>
+			</select>
+		</div>
+	</form>
+</div>
+	
+	
 
 {% endblock %}
