@@ -32,7 +32,6 @@ body{ padding-top:70px; }
 /* End navbar */
 /* End Header */
 
-
 /*  Registration container*/
 .register{
 	background-color:#f8f8f8;
@@ -48,6 +47,98 @@ body{ padding-top:70px; }
 	display:inline;
 }
 
+.last{
+	max-width:49%;
+	display:inline;
+	float:right;
+}/* End Registration Form */
+/* End Registration */
+
+
+input:required:valid {
+	box-shadow: 0px 0px 7px #00FF00 ;
+	border:1px solid #00CC00; 
+	-moz-box-shadow: none;
+}
+
+/* Student Record */
+.studentRecordContainer{
+	width:100%;
+	padding-left:70px;
+	padding-top:30px;
+	padding-right:70px;
+}
+
+.inline{
+	display:inline;
+}
+
+.right{
+	float:right;
+}
+
+.studentRecordLabel{
+	padding-right:15px;
+	padding-left:20px;
+}
+
+.studentRecordInfoContainer{
+	width:100%;
+	padding-left:100px;
+	padding-top:60px;
+	padding-right:100px;
+}
+
+/* Student Record */
+.studentRecordContainer{
+	width:100%;
+	padding-left:70px;
+	padding-top:30px;
+	padding-right:70px;
+}
+/* Course Details */
+.course-details-content {
+	width: 75%;
+	float:left;
+	margin-right:5%;
+}
+
+.inline{
+	display:inline;
+}
+.course-details-sidebar{
+	float:left;
+	width:20%;
+}
+
+.right{
+	float:right;
+}
+#course-details .moreButton {
+	float:right;
+	border:none;
+	background-color:transparent;
+}
+
+.course-details-content-width {
+	width:855px;
+}
+
+.course-details-button-list {
+	list-style-type:none;
+	margin:0;
+	padding:0
+}
+
+.course-details-button-list li{
+	display:inline;
+}
+
+#course-details-buttons {
+	float: left;
+}
+
+/* End Course Details */
 .last{
 	max-width:49%;
 	display:inline;

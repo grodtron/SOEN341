@@ -43,6 +43,23 @@ def course_selection(request):
     return render(request, 'home/course-selection.html', context)
 
 @login_required
+def course_details(request):
+	
+    current_course_id = "54"
+	
+    soencourses = Course.objects.filter(
+        course_id__exact=current_course_id
+    ).exclude(
+        course_name__exact="None",
+        description__exact="None"
+    )
+
+    context = {
+        "course"   : list(soencourses[:1])
+    }
+    return render(request, 'home/course-details.html', context)
+        
+@login_required
 def edit_student_record(request):
 
   allterms = Term.objects.all()
@@ -61,3 +78,12 @@ def edit_student_record(request):
   }
   return render(request , 'home/student-record-edit.html' , context)
 
+@login_required
+def edit_student_record(request):
+  allterms = Term.objects.all()
+  allyears = range(2010,2015)
+  context = {
+    "terms" : list(allterms),
+    "years" : list(allyears)
+  }
+  return render(request , 'home/student-record-edit.html' , context)
