@@ -16,12 +16,12 @@
 	
 	function displayList(param){
 		changeClass(param);
-		var elems = document.getElementsByClassName('col-md-9 table-bordered');
+		var elems = document.getElementsByClassName('col-md-12 table-bordered');
 		for(var i = 0; i < elems.length; i++) {
-			elems[i].className = 'col-md-9 table-bordered hide';
+			elems[i].className = 'col-md-12 table-bordered hidden';
 		}
 		var element = "program"+param.id;
-		document.getElementById(element).className = 'col-md-9 table-bordered';
+		document.getElementById(element).className = 'col-md-12 table-bordered';
 	}
 </script>
 
@@ -29,142 +29,150 @@
 	<h1>Department Of Engineering & Computer Science <small>Concordia University</small></h1>
 	<hr>
 	<div class="row">
-	<div class="col-md-3"><h2 class="inline">Programs</h2></div>
-	<div class="col-md-9"><h2 class="inline">Courses</h2></div>
-	</div>
-	<div class="row">
-	<p></p>
-		<div class="col-md-3">
-			<table class="table table-bordered">
-				<tr>
-					<th><button type="button" id="0" class="btn btn-default btn-block active" onclick="displayList(this)">Building Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="1" class="btn btn-default btn-block" onclick="displayList(this)">Civil Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="2" class="btn btn-default btn-block" onclick="displayList(this)">Computer Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="3" class="btn btn-default btn-block" onclick="displayList(this)">Computer Science</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="4" class="btn btn-default btn-block" onclick="displayList(this)">Electrical Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="5" class="btn btn-default btn-block" onclick="displayList(this)">Industrial Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="6" class="btn btn-default btn-block" onclick="displayList(this)">Mechanical Engineering</button></th>
-				</tr>
-				<tr>
-					<th><button type="button" id="7" class="btn btn-default btn-block" onclick="displayList(this)">Software Engineering</button></th>
-				</tr>
-			</table>
+		<div class="col-md-3"><h2 class="inline">Programs</h2>
+			<div class="row">
+			</br>
+				<div class="col-md-12">
+					<table class="table table-bordered">
+						<tr>
+							<th><button type="button" id="0" class="btn btn-default btn-block" onclick="displayList(this)">Building Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="1" class="btn btn-default btn-block" onclick="displayList(this)">Civil Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="2" class="btn btn-default btn-block" onclick="displayList(this)">Computer Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="3" class="btn btn-default btn-block" onclick="displayList(this)">Computer Science</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="4" class="btn btn-default btn-block" onclick="displayList(this)">Electrical Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="5" class="btn btn-default btn-block" onclick="displayList(this)">Industrial Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="6" class="btn btn-default btn-block" onclick="displayList(this)">Mechanical Engineering</button></th>
+						</tr>
+						<tr>
+							<th><button type="button" id="7" class="btn btn-default btn-block" onclick="displayList(this)">Software Engineering</button></th>
+						</tr>
+					</table>
+				</div>
+			</div>
 		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program0" class="col-md-9 table-bordered">
-			<table class="table table-striped">
-				{% for course in bldgcourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+		<div class="col-md-9"><h2 class="inline">Courses</h2>
+			<div class="row">
+			</br>
+				<div style="height:410px;background-color:#f9f9f9;" class="col-md-12 table-bordered">
+					<h3> Please select a program to view the corresponding course list </h3>
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program0" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in bldgcourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program1" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in civicourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program1" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in civicourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program2" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in coencourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program2" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in coencourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program3" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in compcourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program3" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in compcourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program4" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in eleccourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program4" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in eleccourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program5" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in inducourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program5" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in inducourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program6" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in mechcourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program6" class="col-md-12 table-bordered hidden">
+					<table class="table table-striped">
+						{% for course in mechcourses %}
+						<tr>
+						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+						<td>{{course.course_name}}</td>
+						<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
-		</div>
-		<div style="height:410px;overflow-y:scroll;" id="program7" class="col-md-9 table-bordered hide">
-			<table class="table table-striped">
-				{% for course in soencourses %}
-				<tr>
-				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
-				<td>{{course.course_name}}</td>
-				<td>
+						</td>
+						</tr>
+						{% endfor %}
+					</table>	
+				</div>
+				<div style="height:410px;overflow-y:scroll;" id="program7" class="col-md-12 table-bordered hidden">
+				<table class="table table-striped">
+					{% for course in soencourses %}
+					<tr>
+					<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
+					<td>{{course.course_name}}</td>
+					<td>
                {% shopping_cart_add_button course.course_id %}
-				</td>
-				</tr>
-				{% endfor %}
-			</table>	
+					</td>
+					</tr>
+					{% endfor %}
+				</table>	
+			</div>
+			</div>
 		</div>
 	</div>
 </div>
