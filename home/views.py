@@ -94,7 +94,7 @@ def course_details(request, course_code):
         course__exact=course
     )
     scheduleItemsTimes = ScheduleItemTime.objects.filter(
-    
+        schedule_item__exact=scheduleItems
     )
 
     context = {
