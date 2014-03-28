@@ -21,4 +21,5 @@ urlpatterns = patterns('',
     url(r'^shopping-cart$', 'home.shopping_cart.shopping_cart', name='shopping cart'),
     url(r'^shopping-cart/do-add$', 'home.shopping_cart.add', name='shopping cart add'),
     url(r'^shopping-cart/do-remove$', 'home.shopping_cart.remove', name='shopping cart remove'),
+    url(r'^shopping-cart/get-cart$', 'home.shopping_cart.get_cart', name='get complete shopping cart')
 )

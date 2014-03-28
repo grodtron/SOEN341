@@ -1,5 +1,7 @@
 {% extends "home/base.html" %}
 
+{% load shopping_cart_tags %}
+
 {% block content %}
 
 <script>
@@ -67,10 +69,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -83,10 +82,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					 <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -99,10 +95,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -115,10 +108,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -131,10 +121,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -147,10 +134,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -163,10 +147,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
@@ -179,10 +160,7 @@
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
 				<td>
-				   <form action="/shopping-cart/do-add" method="post">
-					  <input type="hidden" name="course" value="{{ course.course_id }}">
-					  <button class="btn btn-default btn-block" type="submit">Add to cart</button>
-				   </form>
+               {% shopping_cart_add_button course.course_id %}
 				</td>
 				</tr>
 				{% endfor %}
