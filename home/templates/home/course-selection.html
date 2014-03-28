@@ -1,16 +1,34 @@
 {% extends "home/base.html" %}
 
-{% block title %}Course Selection Page{% endblock %}
-
 {% block content %}
-
-{% for course in courses %}
-
-<div class="container">
-   <h3>{{ course.course_code }} - {{ course.course_name }}</h3>
-   <p>{{ course.description }}</p>
+<div class="page-header">
+  <h1>Department Of Engineering & Computer Science <small>Concordia University</small></h1>
 </div>
 
-{% endfor %}
+<table class="table table-striped">
+	<tr>
+		<th><h2 class="inline">Programs:</h2></th>
+		<th><button type="button" class="btn btn-primary">Building Engineering</button></th>
+		<tr>
+		{% for course in courses %}
+		<td><a class="btn btn-default" href="/course-details/{{course.course_code}}">{{course.course_code}}</a></td>
+		{% endfor %}
+		</tr>
+		<th><button type="button" class="btn btn-primary">Civil Engineering</button></th>
+		<th><button type="button" class="btn btn-primary">Computer Engineering</button></th>
+		<th><button type="button" class="btn btn-primary">Computer Science</button></th>
+	</tr>
+	<tr>
+		<th><button type="button" class="btn btn-primary">Electrical Engineering</button></th>
+		<th><button type="button" class="btn btn-primary">Industrial Engineering</button></th>
+		<th><button type="button" class="btn btn-primary">Mechanical Engineering</button></th>
+		<th><button type="button" class="btn btn-primary">Software Engineering</button></th>
+	</tr>
+	<tr>
+		{% for course in courses %}
+		<div class="col-md-1"><a class="btn btn-default" href="/course-details/{{course.course_code}}">{{course.course_code}}</a></div>
+		{% endfor %}
+	</tr>
+</table>
 
 {% endblock %}
