@@ -1,6 +1,6 @@
 {% extends "home/base.html" %}
 
-{% block title %}Course Selection Page{% endblock %}
+{% block title %}Shopping Cart{% endblock %}
 
 {% block content %}
 
@@ -12,9 +12,9 @@
 <td>{{course.course_code}}</td>
 <td>{{course.course_name}}</td>
 <td>
-   <form action="/shopping-cart/do-add" method="post">
+   <form action="/shopping-cart/do-remove" method="post">
       <input type="hidden" name="course" value="{{ course.course_id }}">
-      <button class="btn btn-default" type="submit">add to cart</button>
+      <button class="btn btn-default" type="submit">remove</button>
    </form>
 </td>
 </tr>
