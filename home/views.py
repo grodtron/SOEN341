@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course, Term, StudentRecord
+from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord
 
 from login import login_view
 from datetime import date
@@ -87,9 +87,21 @@ def course_details(request, course_code):
     course = Course.objects.filter(
         course_code__exact=course_code
     )
+    prerequisites = CourseRequisites.objects.filter(
+        course__exact=course
+    )
+    scheduleItems = ScheduleItem.objects.filter(
+        course__exact=course
+    )
+    scheduleItemsTimes = ScheduleItemTime.objects.filter(
+        schedule_item__exact=scheduleItems
+    )
 
     context = {
-        "course"  : course[0]
+        "course"               : course[0],
+        "prereqs"              : list(prerequisites),
+        "scheduleItems"        : list(scheduleItems),
+        "scheduleItemsTimes"   : list(scheduleItemsTimes)
     }
     return render(request, 'home/course-details.html', context)
         

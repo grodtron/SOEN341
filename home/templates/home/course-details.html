@@ -29,7 +29,7 @@ function dropDownAndHide(field1,field2) {
 <div class="container">
 	<div id="course-details">
 		<div class="course-details-content">
-			<p>Course Selection >> Course Details Page</p>
+			<p><a href="../course-selection">Course Selection</a> >> <a href="">Course Details Page ({{course.course_code}})</a></p>
 			<table class="table table-striped table-bordered">
 				<tr>
 					<td>
@@ -37,61 +37,105 @@ function dropDownAndHide(field1,field2) {
 							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
-				<tr id="cDescription" style="display:none">
+				<tr id="cDescription">
 					<td>
 						<p>{{course.description}}</p>
 					</td>
 				</tr>
 			</table>
-			<div id="course-details-buttons">
+			<div class="course-details-buttons">
 				<ul class="course-details-button-list">
-					<li id="ddTeachers"><input type="button" class="btn" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="Teachers"/></li>
-					<li id="ddSections"><input type="button" class="btn" onclick="dropDownAndHide('cSections','ddSections')" value="Sections"/></li>
-					<li id="ddCredits"><input type="button" class="btn" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="Credits"/></li>
-					<li id="ddPrereq"><input type="button" class="btn" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="Prerequisites"/></li>
-					<li id="ddCoreq"><input type="button" class="btn" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="Corequisites"/></li>
+					<!--
+					<li id="ddTeachers" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="Teachers"/></li>
+					-->
+					<li id="ddSections" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cSections','ddSections')" value="Sections"/></li>
+					<li id="ddCredits" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="Credits"/></li>
+					<li id="ddPrereq" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="Prerequisites"/></li>
+					<li id="ddCoreq" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="Corequisites"/></li>
 				</ul>
 			</div>
 			<table class="table table-striped table-bordered">
-				<tr id="cTeachers" style="display:none;">
+				<!--
+				<tr id="cTeachers">
 					<td class="course-details-content-width">
-						<p><em>Teachers:</em> TEST
+						<p><em><b>Teachers:</b></em> ||
+						{% if scheduleItems %}
+							{% for scheduleItem in scheduleItems %}
+								{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }} ||
+							{% endfor %}
+						{% else %}
+							None ||
+						{% endif %}
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="hide"/>
 						</p>
 					</td>
 				</tr>
-				<tr id="cSections" style="display:none">
+				-->
+				<tr id="cSections">
 					<td class="course-details-content-width">
-						<p><em>Sections:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
+						<p><em><b>Sections:</b></em> 
+						{% if scheduleItems %}
+							{% for scheduleItem in scheduleItems %}
+								{{ scheduleItem.section }} -
+								{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }}
+								{% if scheduleItem.instructor.instructor_fname != "" %}
+									 <em><b> : Schedule Items: </b></em>||
+									{% for scheduleItemTimes in scheduleItemsTimes %}
+										{% if scheduleItemTimes.schedule_item == scheduleItem %}
+											{{ scheduleItem.item_type.item_type_name }}
+											{{ scheduleItemTimes.day.day_name }}
+											{{ scheduleItemTimes.start }} - {{ scheduleItemTimes.end }} || 
+										{% endif %}
+									{% endfor %}
+								{% else %}
+									Information not available
+								{% endif %}
+								</br>
+							{% endfor %}
+						{% else %}
+							Information not available
+						{% endif %}
+						<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
 						</p>
 					</td>
 				</tr>
-				<tr id="cCredits" style="display:none">
+				<tr id="cCredits">
 					<td class="course-details-content-width">
-						<p><em>Credits:</em> {{course.course_credits}}
+						<p><em><b>Credits:</b></em> {{course.course_credits}}
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="hide"/>
 						</p>
 					</td>
 				</tr>
-				<tr id="cPrereq" style="display:none">
+				<tr id="cPrereq">
 					<td class="course-details-content-width">
-						<p><em>Prerequisites:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
+						<p><em><b>Prerequisites:</b></em> ||
+						{% if prereqs %}
+							{% for prereq in prereqs %}
+							<a href="{{ prereq.requisite_course.course_code }}">{{ prereq.requisite_course.course_code }} </a> ||
+							{% endfor %}
+						{% else %}
+							None ||
+						{% endif %}
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="hide"/>
 						</p>
 					</td>
 				</tr>
-				<tr id="cCoreq" style="display:none">
+				<tr id="cCoreq">
 					<td class="course-details-content-width">
-						<p><em>Corequisites:</em> TESTESTTESTESTTESTESTTESTESTTESTESTTESTEST
-							<input type="button" class="btn moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="hide"/>
+						<p><em><b>Corequisites:</b></em> ||
+						None ||
+							<input type="button" class="moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="hide"/>
 						</p>
 					</td>
 				</tr>
 			</table>
+			<form action="/shopping-cart/do-add" method="post">
+				<input type="hidden" name="course" value="{{ course.course_id }}">
+				<a><button class="btn" type="submit"> Add to wishlist</button></a>
+			</form>
 			</br>
-			<a href="course-selection"><button class="btn">Back to Course List</button>
-			</a>
+			<a href="../course-selection"><button class="btn">Back to Course List</button></a></li>
+			</br></br></br></br>
 		</div>
 		<div class="course-details-sidebar">
 			<p> I don't know, the side shit that was on the prototype</p>

@@ -137,8 +137,8 @@ class ScheduleItemGroup(models.Model):
 
 class ScheduleItemTime(models.Model):
     row_id           = models.IntegerField(primary_key=True)
-    schedule_item_id = models.ForeignKey(ScheduleItem)
-    day_id           = models.ForeignKey(Day)
+    schedule_item = models.ForeignKey(ScheduleItem)
+    day           = models.ForeignKey(Day)
     start            = models.TimeField()
     end              = models.TimeField()
     class Meta:
