@@ -31,11 +31,10 @@ def add(request):
    if request.POST:
       cart, created = ShoppingCart.objects.get_or_create(user=request.user)
 
-      if not created:
-         course = Course.objects.get(course_id=request.POST.get("course"))
+      course = Course.objects.get(course_id=request.POST.get("course"))
 
-         cart.courses.add(course)
-         cart.save()
+      cart.courses.add(course)
+      cart.save()
 
 
    return redirect("/shopping-cart")
