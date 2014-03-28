@@ -3,9 +3,10 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course, Term
+from home.models import Course, Term, StudentRecord
 
 from login import login_view
+from datetime import date
 
 def index(request):
    if request.user.is_authenticated():
@@ -96,27 +97,21 @@ def course_details(request, course_code):
 def edit_student_record(request):
 
   allterms = Term.objects.all()
-  allyears = range(2010,2015)
-  try:
-      allstudentrecords = StudentRecord.Objects.all()
-  except NameError:
-      allstudentrecords = None
-
-
+  allyears = range(1990, date.today().year+1)
+  allstudentrecords = StudentRecord.objects.filter(
+    user_id__exact = request.user.id
+  )
+  allcourses = Course.objects.all()
   
   context = {
     "terms" : list(allterms),
-    "years" : list(allyears),
-    "studentrecords" : allstudentrecords
+    "years" : allyears[::-1],
+    "studentrecords" : allstudentrecords,
+    "courses" : list(allcourses)
   }
   return render(request , 'home/student-record-edit.html' , context)
 
-@login_required
-def edit_student_record(request):
-  allterms = Term.objects.all()
-  allyears = range(2010,2015)
-  context = {
-    "terms" : list(allterms),
-    "years" : list(allyears)
-  }
-  return render(request , 'home/student-record-edit.html' , context)
+#@login_required
+#def save_student_record(request):
+#  if request.POST:
+
