@@ -134,7 +134,7 @@ input:required:valid {
 	display:inline;
 }
 
-#course-details-buttons {
+.course-details-buttons {
 	float: left;
 }
 
