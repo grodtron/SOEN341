@@ -1,3 +1,5 @@
+
+
 {% extends "home/base.html" %}
 
 {% block content %}
@@ -11,29 +13,139 @@
 </div>
 
 <div class="container studentRecordInfoContainer">
-	<h3 class='inline'>Student Record on File</h3>
 	
-	{% if studentrecords == None %}
-		<h4>No Data</h4>
-	{% else %}
-		<h4>Data</h4>
-	{% endif %}
 
 	<h3 class="inline">Add Term</h3>
-	<form class="form-inline inline" role="form" action="" method="get">
+	<form class="form-inline inline" role="form" action="" method="post">
 		<div class="form-group">
 			<label class="control-label inline studentRecordLabel">Term:</label>
 			<select class="form-control">
-				<option value="">test</option>
+				{% for term in terms %}
+				<option value="{{term.term_id}}">{{term.term_name}}</option>
+				{% endfor %}
 			</select>
 			<label class="control-label inline studentRecordLabel">Year:</label>
 			<select class="form-control">
-				<option value="">test</option>
+				{% for year in years %}
+				<option value="{{year}}">{{year}}</option>
+				{% endfor%}
+			</select>
+
+			<label class="control-label inline studentRecordLabel" >Number of Courses</label>
+			<select class="form-control" id="nmbOfCourses">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
 			</select>
 		</div>
+
+		
+		<table class="table table-striped table-bordered table-condensed srecord-margin">
+			<tbody>
+				<tr id="firstRow">
+					<td><strong>Course</strong></td>
+					<td><strong>Course Name</strong></td>
+					<td><strong>Credits</strong></td>
+					<td><strong>Letter Grade</strong></td>
+					<td><strong>GPA</strong></td>
+				</tr>
+			</tbody>
+		</table>
 	</form>
+
+	<h3 class='inline'>Student Record on File</h3>
+	
+	<!-- Have to get student record -->
+	<table class="table table-striped table-bordered table-condensed srecord-margin">
+			<tbody>
+				<tr>
+					<td><strong>Course</strong></td>
+					<td><strong>Course Name</strong></td>
+					<td><strong>Credits</strong></td>
+					<td><strong>Letter Grade</strong></td>
+					<td><strong>GPA</strong></td>
+				</tr>
+			</tbody>
+		</table>
+
 </div>
 	
 	
+<script>
+	// Used to generate all options needed
+	function optionGenerator(array){
+		var pre = "<option>";
+		var post = "</option>"
+		var options = "";
 
+		var i;
+
+		for (i=0; i<array.length ; i++){
+			options = options.concat(pre);
+			options = options.concat(array[i]);
+			options = options.concat(post);
+		}
+
+		return options;
+	}
+
+	// Used to wrap the string with chosen tag
+	function wrap(string , tag){
+		var pre = "<"+tag+">";
+		var post = "</"+tag+">";
+		var returnString = pre;
+		returnString = returnString.concat(string);
+		returnString = returnString.concat(post);
+
+		return returnString;
+	}
+
+	// Define exists method
+	jQuery.fn.exists = function(){return this.length>0;}
+
+	// Event Handler
+	$("#nmbOfCourses").change( function() {
+
+		// Delete previous number of rows
+		while($("#addedRow").exists()){
+			$("#addedRow").remove();
+		}
+		
+
+		// Data needed for dropdown
+		var courseCode = [ {% for course in courses %} "{{ course.course_code}}", {% endfor %} ];
+		var letterGrade = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-" , "F"];
+
+		// Used to generate right number of rows
+		var nmbrOfRows = $("#nmbOfCourses").val();
+
+		// All labels
+		var courseCodeLabel = "<label class='control-label'>Course</label>"
+		var letterGradeLabel = "<label class='control-label'>Letter Grade</label>"
+
+		// All packaged options
+		var courseOption = wrap(courseCodeLabel.concat( wrap(optionGenerator(courseCode),"select") ), "td" );
+		var letterGradeOption = wrap(letterGradeLabel.concat(wrap(optionGenerator(letterGrade), "select")), "td" );
+
+		var emptyOption = "<td></td>";
+
+		var line = courseOption;
+		line = line.concat(emptyOption);
+		line = line.concat(emptyOption);
+		line = line.concat(letterGradeOption);
+		line = line.concat(emptyOption);
+		line = "<tr id='addedRow'>"+line+"</tr>";
+
+		// Inject into HTML
+		var i;
+		for(i=0 ; i<nmbrOfRows ; i++){
+			$(line).insertAfter("#firstRow");
+		}
+
+	} );
+
+</script>
 {% endblock %}
