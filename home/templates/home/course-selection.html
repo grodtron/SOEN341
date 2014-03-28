@@ -78,7 +78,7 @@
 		</div>
 		<div style="height:410px;overflow-y:scroll;" id="program1" class="col-md-9 table-bordered hide">
 			<table class="table table-striped">
-				{% for course in coencourses %}
+				{% for course in civicourses %}
 				<tr>
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
@@ -94,7 +94,7 @@
 		</div>
 		<div style="height:410px;overflow-y:scroll;" id="program2" class="col-md-9 table-bordered hide">
 			<table class="table table-striped">
-				{% for course in civicourses %}
+				{% for course in coencourses %}
 				<tr>
 				<td><a href="/course-details/{{course.course_code}}" class="btn btn-default" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 				<td>{{course.course_name}}</td>
