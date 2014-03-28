@@ -73,26 +73,29 @@ function dropDownAndHide(field1,field2) {
 				-->
 				<tr id="cSections">
 					<td class="course-details-content-width">
-						<em><b>Sections:</b></em> 
-						<p>
-						{% for scheduleItem in scheduleItems %}
-							{{ scheduleItem.section }} -
-							{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }}
-							{% if scheduleItem.instructor.instructor_fname != "" %}
-								 <em><b> : Schedule Items: </b></em>||
-								{% for scheduleItemTimes in scheduleItemsTimes %}
-									{% if scheduleItemTimes.schedule_item == scheduleItem %}
-										{{ scheduleItem.item_type.item_type_name }}
-										{{ scheduleItemTimes.day.day_name }}
-										{{ scheduleItemTimes.start }} - {{ scheduleItemTimes.end }} || 
-									{% endif %}
-								{% endfor %}
-							{% else %}
-								Information not available
-							{% endif %}
-							</br>
-						{% endfor %}
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
+						<p><em><b>Sections:</b></em> 
+						{% if scheduleItems %}
+							{% for scheduleItem in scheduleItems %}
+								{{ scheduleItem.section }} -
+								{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }}
+								{% if scheduleItem.instructor.instructor_fname != "" %}
+									 <em><b> : Schedule Items: </b></em>||
+									{% for scheduleItemTimes in scheduleItemsTimes %}
+										{% if scheduleItemTimes.schedule_item == scheduleItem %}
+											{{ scheduleItem.item_type.item_type_name }}
+											{{ scheduleItemTimes.day.day_name }}
+											{{ scheduleItemTimes.start }} - {{ scheduleItemTimes.end }} || 
+										{% endif %}
+									{% endfor %}
+								{% else %}
+									Information not available
+								{% endif %}
+								</br>
+							{% endfor %}
+						{% else %}
+							Information not available
+						{% endif %}
+						<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
 						</p>
 					</td>
 				</tr>
