@@ -8,7 +8,9 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'home.views.index', name='home'),
     url(r'^student-record$', 'home.views.student_record', name='student-record'),
+
     url(r'^course-selection$', 'home.views.course_selection', name='course-selection'),
+    url(r'^course-selection/([A-Z]{4})$', 'home.views.course_selection', name='course-selection'),
 
     url(r'^course-details/([A-Z]{4}[0-9]{3})$', 'home.views.course_details', name='course-details'),
 
