@@ -24,8 +24,7 @@ class Course(models.Model):
         db_table = 'courses'
 
 class ShoppingCart(models.Model):
-   row_id      = models.IntegerField(primary_key=True)
-   course      = models.ManyToManyField(Course)
+   courses     = models.ManyToManyField(Course)
    user        = models.OneToOneField(User)
 
 class CourseRequisites(models.Model):

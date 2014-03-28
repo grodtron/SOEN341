@@ -17,4 +17,8 @@ urlpatterns = patterns('',
     url(r'^do-logout$', 'home.login.do_logout', name='do logout'),
     url(r'^do-register$', 'home.login.do_register', name='do register'),
     url(r'^edit-student-record$', 'home.views.edit_student_record' , name='edit-student-record'),
+
+    url(r'^shopping-cart$', 'home.shopping_cart.shopping_cart', name='shopping cart'),
+    url(r'^shopping-cart/do-add$', 'home.shopping_cart.add', name='shopping cart add'),
+    url(r'^shopping-cart/do-remove$', 'home.shopping_cart.remove', name='shopping cart remove'),
 )

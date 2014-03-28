@@ -1,6 +1,7 @@
 {% extends "home/base.html" %}
 
 {% block content %}
+<<<<<<< HEAD
 <div class="page-header">
   <h1>Department Of Engineering & Computer Science <small>Concordia University</small></h1>
 </div>
@@ -30,5 +31,26 @@
 		{% endfor %}
 	</tr>
 </table>
+=======
+
+<div class="container">
+<table class="table">
+<tbody>
+{% for course in courses %}
+<tr>
+<td>{{course.course_code}}</td>
+<td>{{course.course_name}}</td>
+<td>
+   <form action="/shopping-cart/do-add" method="post">
+      <input type="hidden" name="course" value="{{ course.course_id }}">
+      <button class="btn btn-default" type="submit">add to cart</button>
+   </form>
+</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+>>>>>>> origin/HEAD
 
 {% endblock %}
