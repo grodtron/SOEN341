@@ -15,11 +15,10 @@ function getCourse()
 	{% for course in allcourses %}
 		var code = "{{course.course_code}}";
 		var name = "{{course.course_name}}";
-		var id = "{{course.course_id}}";
 		if(code == key){	
 			node1.innerHTML='<a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a>';
 			node2.innerHTML=name;
-			node3.innerHTML='<form action="/shopping-cart/do-add" method="post"><input type="hidden" name="course" value="{{ course.course_id }}"><a><button class="btn btn-block" type="submit"> Add to wishlist</button></a></form>';
+			node3.innerHTML='<form action="/shopping-cart/do-add" method="post"><input type="hidden" name="course" value="{{course.course_id}}"><a><button class="btn btn-block" type="submit"> Add to wishlist</button></a></form>';
 			}
 	{% endfor %}
 	
@@ -114,8 +113,14 @@ function getCourse()
 			<div class="col-md-7">
 				  <nav class="navbar navbar-default" role="navigation">
 				  <div class="container-fluid">
-
-					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="navbar-header">
+				  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				  </button>
+				</div>
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					  <ul class="nav navbar-nav">		
 						<li class="dropdown">
@@ -134,8 +139,8 @@ function getCourse()
 						</div>
 						<button type="button" class="btn btn-default" onclick="getCourse()">Search</button>
 					  </form>
-					</div><!-- /.navbar-collapse -->
-				  </div><!-- /.container-fluid -->
+					</div>
+				  </div>
 				</nav>
 			</div>
 			</div>
