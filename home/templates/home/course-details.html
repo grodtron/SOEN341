@@ -44,7 +44,7 @@ function dropDownAndHide(field1,field2) {
 				<tr>
 					<td>
 						<h3>{{ course.course_code }} - {{ course.course_name }}
-							{% shopping_cart_add_button course.course_id %}
+							<a href="">{% shopping_cart_add_button course.course_id %}</a>
 							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
@@ -145,7 +145,21 @@ function dropDownAndHide(field1,field2) {
 			</br></br></br></br>
 		</div>
 		<div class="course-details-sidebar">
-			<p> I don't know, the side shit that was on the prototype</p>
+			<h3> Current Wishlist </h3>
+			<table class="table table-striped table-bordered">
+			{% if shoppingCart %}
+				{% for course in shoppingCart %}
+					<tr>
+						<td><b>{{course.course_code}} </b> -
+						{{course.course_name}}</td>
+					</tr>
+				{% endfor %}
+			{% else %}
+				<tr>
+					<td>Your wishlist is currently empty</td>
+				</tr>
+			{% endif %}
+			</table>
 		</div>
 	</div>
 </div>
