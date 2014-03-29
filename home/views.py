@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord
+from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord, ShoppingCart
 
 from login import login_view
 from datetime import date
@@ -68,12 +68,18 @@ def course_details(request, course_code):
     scheduleItemsTimes = ScheduleItemTime.objects.filter(
         schedule_item__exact=scheduleItems
     )
-
+    department_temp = course_code
+    
+    shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+    shopping_cart = shopping_cart.courses.all()
+    
     context = {
         "course"               : course[0],
         "prereqs"              : list(prerequisites),
         "scheduleItems"        : list(scheduleItems),
-        "scheduleItemsTimes"   : list(scheduleItemsTimes)
+        "scheduleItemsTimes"   : list(scheduleItemsTimes),
+        "department"           : department_temp,
+        "shoppingCart"         : shopping_cart
     }
     return render(request, 'home/course-details.html', context)
         
