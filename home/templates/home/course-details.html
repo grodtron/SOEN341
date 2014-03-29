@@ -1,5 +1,7 @@
 {% extends "home/base.html" %}
 
+{% load shopping_cart_tags %}
+
 {% block title %}Course Details Page{% endblock %}
 
 {% block content %}
@@ -9,6 +11,7 @@ $( document ).ready(function() {
 	var department = $("#departmentValue").val();
 	department = department.replace(/\d+/g, '');
 	$("a[href='../course-selection/']").attr('href', '../course-selection/' + department)
+	alert(test)
 });
 
 function dropDown(field) {
@@ -41,6 +44,7 @@ function dropDownAndHide(field1,field2) {
 				<tr>
 					<td>
 						<h3>{{ course.course_code }} - {{ course.course_name }}
+							{% shopping_cart_add_button course.course_id %}
 							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
@@ -136,12 +140,8 @@ function dropDownAndHide(field1,field2) {
 					</td>
 				</tr>
 			</table>
-			<form action="/shopping-cart/do-add" method="post">
-				<input type="hidden" name="course" value="{{ course.course_id }}">
-				<a><button class="btn" type="submit"> Add to wishlist</button></a>
-			</form>
 			</br>
-			<a href="../course-selection/"><button class="btn">Back to Course List</button></a></li>
+			<a class="btn" href="../course-selection/"><button class="btn">Back to Course List</button></a>
 			</br></br></br></br>
 		</div>
 		<div class="course-details-sidebar">
