@@ -29,17 +29,27 @@ def student_record(request):
 @login_required
 def course_selection(request,program=None):
     if program != None:
-        allcourses = Course.objects.filter(course_code__startswith=program).exclude(
+        programcourses = Course.objects.filter(course_code__startswith=program).exclude(
             course_name__exact="None",
             description__exact="None"
         ).order_by('course_code')
 
+        everycourse = Course.objects.exclude(
+            course_name__exact="None",
+            description__exact="None"
+        ).order_by('course_code')
         context = {
-            "courses"   : list(allcourses),
+            "courses"   : list(programcourses),
+            "allcourses"   : list(everycourse)
         }
     else:
+        everycourse = Course.objects.exclude(
+            course_name__exact="None",
+            description__exact="None"
+        ).order_by('course_code')
         context = {
-            "courses"   : list()
+            "courses"   : list(),
+            "allcourses"   : list(everycourse)
         }
     return render(request, 'home/course-selection.html', context)
 

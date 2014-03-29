@@ -1,3 +1,7 @@
+import json
+
+from django.http import HttpResponse
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -36,6 +40,19 @@ def add(request):
       cart.courses.add(course)
       cart.save()
 
+      courses = cart.courses.values_list('course_id', flat=True)
 
-   return redirect("/shopping-cart")
+      return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
+   else:
+      return HttpResponse("[]", content_type="application/json")
+
+def get_cart(request):
+    if request.user.is_authenticated():
+        cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+
+        courses = cart.courses.values_list('course_id', flat=True)
+
+        return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
+    else:
+        return HttpResponse("[]", content_type="application/json")
    
