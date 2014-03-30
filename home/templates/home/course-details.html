@@ -44,7 +44,7 @@ function dropDownAndHide(field1,field2) {
 				<tr>
 					<td>
 						<h3>{{ course.course_code }} - {{ course.course_name }}
-							<a href="">{% shopping_cart_add_button course.course_id %}</a>
+							<a href="#" onclick="setTimeout(window.document.location='',10000);">{% shopping_cart_add_button course.course_id %}</a>
 							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
