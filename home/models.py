@@ -125,11 +125,11 @@ class ScheduleItem(models.Model):
 
 class ScheduleItemGroup(models.Model):
     row_id      = models.IntegerField(primary_key=True)
-    course      = models.ForeignKey(Course)
-    term        = models.ForeignKey(Term)
-    lecture     = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
-    tutorial    = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
-    lab         = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    course      = models.OneToOneField(Course)
+    term        = models.OneToOneField(Term)
+    lecture     = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
+    tutorial    = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
+    lab         = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
     class Meta:
         managed = False
         db_table = 'schedule_item_groups'
@@ -137,8 +137,8 @@ class ScheduleItemGroup(models.Model):
 
 class ScheduleItemTime(models.Model):
     row_id           = models.IntegerField(primary_key=True)
-    schedule_item = models.ForeignKey(ScheduleItem)
-    day           = models.ForeignKey(Day)
+    schedule_item    = models.OneToOneField(ScheduleItem)
+    day              = models.OneToOneField(Day)
     start            = models.TimeField()
     end              = models.TimeField()
     class Meta:
@@ -159,10 +159,6 @@ class StudentRecord(models.Model):
 
 
 class StudentSchedule(models.Model):
-    row_id           = models.IntegerField(primary_key=True)
-    user             = models.ForeignKey(User)
-    schedule_item    = models.ForeignKey(ScheduleItem)
-    class Meta:
-        managed = False
-        db_table = 'student_schedules'
+    user                = models.ForeignKey(User)
+    schedule_item_group = models.ForeignKey(ScheduleItemGroup)
 
