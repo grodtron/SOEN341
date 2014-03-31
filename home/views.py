@@ -38,18 +38,26 @@ def course_selection(request,program=None):
             course_name__exact="None",
             description__exact="None"
         ).order_by('course_code')
+
+        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(programcourses),
-            "allcourses"   : list(everycourse)
+            "allcourses"   : list(everycourse),
+            "shoppingCart" : shopping_cart
         }
     else:
         everycourse = Course.objects.exclude(
             course_name__exact="None",
             description__exact="None"
         ).order_by('course_code')
+
+        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(),
-            "allcourses"   : list(everycourse)
+            "allcourses"   : list(everycourse),
+            "shoppingCart" : shopping_cart
         }
     return render(request, 'home/course-selection.html', context)
 
