@@ -147,5 +147,40 @@
 
 	} );
 
+
+	$( document ).ready(function() {
+		// Data needed for dropdown
+		var courseCode = [ {% for course in courses %} "{{ course.course_code}}", {% endfor %} ];
+		var letterGrade = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-" , "F"];
+
+		// Used to generate right number of rows
+		var nmbrOfRows = $("#nmbOfCourses").val();
+
+		// All labels
+		var courseCodeLabel = "<label class='control-label'>Course</label>"
+		var letterGradeLabel = "<label class='control-label'>Letter Grade</label>"
+
+		// All packaged options
+		var courseOption = wrap(courseCodeLabel.concat( wrap(optionGenerator(courseCode),"select") ), "td" );
+		var letterGradeOption = wrap(letterGradeLabel.concat(wrap(optionGenerator(letterGrade), "select")), "td" );
+
+		var emptyOption = "<td></td>";
+
+		var line = courseOption;
+		line = line.concat(emptyOption);
+		line = line.concat(emptyOption);
+		line = line.concat(letterGradeOption);
+		line = line.concat(emptyOption);
+		line = "<tr id='addedRow'>"+line+"</tr>";
+
+		// Inject into HTML
+		var i;
+		for(i=0 ; i<nmbrOfRows ; i++){
+			$(line).insertAfter("#firstRow");
+		}
+	})
+
+	
+
 </script>
 {% endblock %}
