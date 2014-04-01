@@ -12,8 +12,7 @@ urlpatterns = patterns('',
 
 
     url(r'^course-selection$', 'home.views.course_selection', name='course-selection'),
-    url(r'^course-selection/([A-Z]{4})$', 'home.views.course_selection', name='course-selection'),
-    url(r'^course-selection/([A-Z]{4}[0-9]{3})$', 'home.views.course_selection', name='course-selection'),
+    url(r'^course-selection/([A-Z]{1,4}[0-9]{0,3})$', 'home.views.course_selection', name='course-selection'),
 
     url(r'^course-details/([A-Z]{4}[0-9]{3})$', 'home.views.course_details', name='course-details'),
 

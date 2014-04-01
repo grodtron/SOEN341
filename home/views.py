@@ -7,7 +7,6 @@ from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime
 
 from login import login_view
 from datetime import date
-import re
 
 def index(request):
    if request.user.is_authenticated():
@@ -32,46 +31,20 @@ def student_record(request):
 
 @login_required
 def course_selection(request,program=None):
-    if re.match("^[A-Z]{4}[0-9]{3}$", str(program)) != None:
-        course_search = Course.objects.filter(course_code__startswith=program).exclude(
-            course_name__exact="None",
-            description__exact="None"
-        )
-        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-        shopping_cart = shopping_cart.courses.all()
-        context = {
-            "courses"       : list(course_search),
-            "shoppingCart" : shopping_cart
-        }
-    elif program != None:
+    shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+    shopping_cart = shopping_cart.courses.all()
+    if program != None:
         programcourses = Course.objects.filter(course_code__startswith=program).exclude(
             course_name__exact="None",
             description__exact="None"
         ).order_by('course_code')
-
-        everycourse = Course.objects.exclude(
-            course_name__exact="None",
-            description__exact="None"
-        ).order_by('course_code')
-
-        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(programcourses),
-            "allcourses"   : list(everycourse),
             "shoppingCart" : shopping_cart
         }
     else:
-        everycourse = Course.objects.exclude(
-            course_name__exact="None",
-            description__exact="None"
-        ).order_by('course_code')
-
-        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(),
-            "allcourses"   : list(everycourse),
             "shoppingCart" : shopping_cart
         }
     return render(request, 'home/course-selection.html', context)
