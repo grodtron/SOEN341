@@ -128,7 +128,7 @@ function dropDownAndHide(field1,field2) {
 							Instructor
 						</h4>
 					</td>
-				<tr>
+				</tr>
 				{% if scheduleItems %}
 					{% for scheduleItem in scheduleItems %}
 						{% if scheduleItem.item_type.item_type_name == "Lec" %}
@@ -149,7 +149,7 @@ function dropDownAndHide(field1,field2) {
 								<td>
 									{% for scheduleItemTimes in scheduleItemsTimes %}
 											{% if scheduleItemTimes.schedule_item == scheduleItem %}
-												{{ scheduleItemTimes.start }} </br>
+												{{ scheduleItemTimes.start }}  </br>
 											{% endif %}
 									{% endfor %}
 								</td>
@@ -163,7 +163,7 @@ function dropDownAndHide(field1,field2) {
 								<td>
 									{% for location in locations %}
 											{% if location ==  scheduleItem.location %}
-												{{ location.campus }} - {{location.room_number}} </br>
+												{{ location.campus }} - {{location.room_number}}
 											{% endif %}
 									{% endfor %}
 								</td>
@@ -172,51 +172,63 @@ function dropDownAndHide(field1,field2) {
 								{{ scheduleItem.instructor.instructor_lname }}
 								</td>
 							</tr>
+						{% endif %}
 						{% if scheduleItemsGroups %}
+						<script>
+						var tutSection = "";
 							{% for scheduleItemsGroup in scheduleItemsGroups %}
 								{% if scheduleItem.section == scheduleItemsGroup.lecture.section %}
 									{% if scheduleItemsGroup.tutorial %}
-										<tr>
-											<td>
-												{{ scheduleItemsGroup.tutorial.item_type.item_type_name }}
-											</td>
-											<td>
-												{{ scheduleItemsGroup.lecture.section }} {{ scheduleItemsGroup.tutorial.section }}
-											</td>
-											<td>
-												{% for scheduleItemTimes in scheduleItemsTimes %}
-													{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}
-														{{ scheduleItemTimes.day.day_name }} </br>
-													{% endif %}
-												{% endfor %}
-											</td>
-											<td>
-												{% for scheduleItemTimes in scheduleItemsTimes %}
-														{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}
-															{{ scheduleItemTimes.start }} </br>
-														{% endif %}
-												{% endfor %}
-											</td>
-											<td>
-												{% for scheduleItemTimes in scheduleItemsTimes %}
-														{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}
-															{{ scheduleItemTimes.end }} </br>
-														{% endif %}
-												{% endfor %}
-											</td>
-											<td>
-												{% for location in locations %}
-														{% if location == scheduleItemsGroup.tutorial.location %}
-															{{ location.campus }} - {{location.room_number}} </br>
-														{% endif %}
-												{% endfor %}
-											</td>
-											<td>
-											{{ scheduleItemsGroup.tutorial.instructor.instructor_fname }} 
-											{{ scheduleItemsGroup.tutorial.instructor.instructor_lname }}
-											</td>
-										</tr>
+										if( tutSection != "{{ scheduleItemsGroup.tutorial.section }}" ) {
+											document.write(""
+											+ "<tr>"
+											+ "<td>"
+											+ "	{{ scheduleItemsGroup.tutorial.item_type.item_type_name }}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{{ scheduleItemsGroup.lecture.section }} {{ scheduleItemsGroup.tutorial.section }}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "		{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "			{{ scheduleItemTimes.day.day_name }} </br>"
+											+ "		{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "			{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "				{{ scheduleItemTimes.start }} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "			{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "				{{ scheduleItemTimes.end }} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for location in locations %}"
+											+ "			{% if location == scheduleItemsGroup.tutorial.location %}"
+											+ "				{{ location.campus }} - {{location.room_number}} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "{{ scheduleItemsGroup.tutorial.instructor.instructor_fname }} "
+											+ "{{ scheduleItemsGroup.tutorial.instructor.instructor_lname }}"
+											+ "</td>"
+											+ "</tr>")
+										}
+										tutSection = "{{ scheduleItemsGroup.tutorial.section }}";
 									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</script>
+							{% for scheduleItemsGroup in scheduleItemsGroups %}
+								{% if scheduleItem.section == scheduleItemsGroup.lecture.section %}
 									{% if scheduleItemsGroup.lab %}
 										<tr>
 											<tr>
@@ -262,16 +274,15 @@ function dropDownAndHide(field1,field2) {
 									{% endif %}
 								{% endif %}
 							{% endfor %}
-						{% else %}
-							<tr>
-								<td colspan="7">
-									Information not available
-								</td>
-							</tr>
 						{% endif %}
-					{% endif %}
-				{% endfor %}
-			{% endif %}
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="7">
+							Information not available
+						</td>
+					</tr>
+				{% endif %}
 			</table>
 			</br>
 			<a class="btn" href="../course-selection/"><button class="btn">Back to Course List</button></a>
