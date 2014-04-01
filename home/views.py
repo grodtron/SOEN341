@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord, ShoppingCart
+from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord, ShoppingCart, ScheduleItemGroup, Location
 
 from login import login_view
 from datetime import date
@@ -88,9 +88,17 @@ def course_details(request, course_code):
     scheduleItems = ScheduleItem.objects.filter(
         course__exact=course
     )
+    scheduleItemsGroups = ScheduleItemGroup.objects.filter(
+        course__exact= course
+    )
     scheduleItemsTimes = ScheduleItemTime.objects.filter(
         schedule_item__exact=scheduleItems
     )
+    
+    locations = Location.objects.filter(
+        
+    )
+    
     department_temp = course_code
     
     shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
@@ -102,7 +110,9 @@ def course_details(request, course_code):
         "scheduleItems"        : list(scheduleItems),
         "scheduleItemsTimes"   : list(scheduleItemsTimes),
         "department"           : department_temp,
-        "shoppingCart"         : shopping_cart
+        "shoppingCart"         : shopping_cart,
+        "scheduleItemsGroups"  : list(scheduleItemsGroups),
+        "locations"            : list(locations)
     }
     return render(request, 'home/course-details.html', context)
         
