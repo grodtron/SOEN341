@@ -27,7 +27,7 @@ def remove(request):
 
          cart.courses.remove(course)
 
-   return redirect("/shopping-cart")
+   return get_cart_dict(cart)
 
 
 def get_cart_dict(cart):
@@ -46,16 +46,13 @@ def add(request):
       cart.courses.add(course)
       cart.save()
 
-      return get_cart_dict(cart)
-   else:
-      return HttpResponse("[]", content_type="application/json")
+   return get_cart_dict(cart)
 
 
+@login_required
 def get_cart(request):
     if request.user.is_authenticated():
-        cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+       cart, created = ShoppingCart.objects.get_or_create(user=request.user)
 
-        return get_cart_dict(cart)
-    else:
-        return HttpResponse("[]", content_type="application/json")
+    return get_cart_dict(cart)
    

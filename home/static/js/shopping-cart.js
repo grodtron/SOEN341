@@ -22,37 +22,68 @@ $(document).ready(function(){
       }
    }
 
-   var setButtonChecked = function(btn){
-      btn
-         .button('complete')
-         .removeClass('btn-primary')
-         .addClass('btn-success');
-      
-   }
-
    var updateButtons = function(cart){
+      $('.shopping-btn').each(function(i, btn){
+         setButtonAdd($(btn));
+      });
       $.each(cart, function(i, course){
          var btn = $("#shopping-btn-" + course.course_id); 
-         setButtonChecked(btn);
+         setButtonRemove(btn);
       });
    }
 
-   $.ajax("/shopping-cart/get-cart",
-      {
-         dataType:"json",
-         success:function(data){
-            updateBadge(data.length);
-            updateSidebar(data);
-            updateButtons(data);
-            // TODO - disable buttons of items already in cart
-         }
-      });
-
-   $(".shopping-btn").bind("click", function(){
-      var btn = $(this); 
+   var setButtonAdd = function(btn){
       btn
+         .unbind('click')
+         .button('add')
+         .removeClass('btn-primary')
+         .addClass('btn-success')
+         .bind('click', onclickAdd)
+   }
+
+   var setButtonRemove = function(btn){
+      btn
+         .unbind('click')
+         .button('remove')
+         .removeClass('btn-primary')
+         .addClass('btn-danger')
+         .bind('click', onclickRemove)
+   }
+
+   var setButtonLoading = function(btn){
+      btn
+         .unbind('click')
          .button('loading')
-         .unbind("click");
+         .removeClass('btn-success')
+         .removeClass('btn-danger')
+         .addClass('btn-primary')
+   }
+
+   var onclickRemove = function(){
+      var btn = $(this); 
+
+      setButtonLoading(btn);
+
+      $.ajax("/shopping-cart/do-remove",
+         {
+            type:"POST",
+            dataType:"json",
+            data:{ course : btn.data("id") },
+            success:function(data, textStatus, jqXHR){
+               setButtonAdd(btn);
+               updateBadge(data.length);
+               updateSidebar(data);
+            },
+            error:function(jqXHR, textStatus, errorThrown){
+               setButtonRemove(btn);
+            }
+         });
+   };
+
+   var onclickAdd = function(){
+      var btn = $(this); 
+
+      setButtonLoading(btn);
 
       $.ajax("/shopping-cart/do-add",
          {
@@ -60,18 +91,25 @@ $(document).ready(function(){
             dataType:"json",
             data:{ course : btn.data("id") },
             success:function(data, textStatus, jqXHR){
-               setButtonChecked(btn);
+               setButtonRemove(btn);
                updateBadge(data.length);
                updateSidebar(data);
             },
             error:function(jqXHR, textStatus, errorThrown){
-               btn
-                  .button('reset')
-                  .removeClass('btn-primary')
-                  .addClass('btn-sdanger')
+               setButtonAdd(btn);
             }
          });
+   };
 
-      this.onclick
+   // Initialize the whole thing
+   $.ajax("/shopping-cart/get-cart",
+   {
+      dataType:"json",
+      success:function(data){
+         updateBadge(data.length);
+         updateSidebar(data);
+         updateButtons(data);
+      }
    });
+         
 });
