@@ -6,17 +6,12 @@
 
 {% block content %}
 <script>
-function handleEnter(){
-var code = document.getElementById('search_code').value;
-var code = code.toUpperCase();
-if(code != ""){
-	window.location.href = "/course-selection/"+code;
-	}
-}
 function searchCode(){
 	var code = document.getElementById('search_code').value;
 	var code = code.toUpperCase();
-	if(code != ""){
+	var res = code.match(/^[A-Z]{4}[0-9]{0,3}$/);
+	document.getElementById('demo').innerHTML=res;
+	if(res != null){
 		document.getElementById('index').href="/course-selection/"+code;
 		}
 }
@@ -123,9 +118,9 @@ function searchCode(){
 					  </ul>
 					  <div class="navbar-form navbar-left">
 						<div class="form-group">
-						  <input type="text" id="search_code" onkeypress="{if (event.keyCode==13) handleEnter()}" class="form-control" placeholder="Course Code">
+						  <input type="text" id="search_code" onkeypress="{if (event.keyCode==13) index.click()}" class="form-control" placeholder="Course Code">
 						</div>
-						<a id="index" class="btn btn-default" href="#" onclick="searchCode()">Search</a>
+						<a id="index" class="btn btn-default" data-toggle="tooltip" title="i.e. SOEN, SOEN3, SOEN34, SOEN341" href="#" onclick="searchCode()">Search</a>
 					  </div>
 					</div>
 				  </div>
