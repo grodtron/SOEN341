@@ -193,3 +193,28 @@ input:required:valid {
 #wiz-logo{
    height:24px;
 }
+
+.time{
+	width:50px;
+	text-align:center;
+	padding:0px;
+}
+
+.scheduleHead{
+	text-align:center;
+	background-color:#C2C2C2;
+}
+
+.scheduleContainer{
+	margin-right:0px;
+	width: 80%;
+	min-width: 500px;
+}
+
+.fixedWidth{
+	table-layout: fixed;
+}
+
+.table>tbody>tr>td{
+	padding:0px;
+}

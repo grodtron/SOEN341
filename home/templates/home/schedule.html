@@ -1,0 +1,137 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div class="container scheduleContainer">
+	<table class="table table-striped table-bordered fixedWidth" id="calendar">
+		<thead>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<script>
+	// Used to wrap string in specific tag
+	function wrap(string , tag){
+		pre = "<"+tag+" class='defaultClass' id='defaultId'>";
+		post = "</"+tag+">";
+
+		returnString = pre;
+		returnString = returnString.concat(string);
+		returnString = returnString.concat(post);
+
+		return returnString;
+	}
+
+	$( document ).ready(function() {
+		var startTime = "8:45";
+
+		$("#calendar thead").append(makeHead())
+
+		$("#calendar tbody").append(makeRows(startTime));
+	});
+
+	// Increments the time by 15 minutes
+	function increaseTime(time){
+
+		timeArray = time.split(":");
+
+		var hour = parseInt(timeArray[0]);
+		var minute = parseInt(timeArray[1]);
+
+		if (minute < 45){
+			minute += 15;
+		}
+		else{
+			hour += 1;
+			minute = 0;
+		}
+
+		if(minute == 0){
+			minute = "00";
+		}
+		else{
+			minute = minute.toString();
+		}
+
+		var returnTime = (hour.toString()).concat(":"+minute);
+
+		return returnTime;
+
+	}
+
+	function makeRows(time){
+		if (time === "10:30"){
+			return wrap( changeClass(wrap(time , "td") , "time") +makeColumn(5) , "tr");
+		}
+		else{
+			return wrap( changeClass(wrap(time, "td") , "time") +makeColumn(5) , "tr")+makeRows(increaseTime(time));
+		}
+	}
+
+	function makeColumn(column){
+		if (column == 1){
+			return wrap("" , "td");
+		}
+		else{
+			return wrap( "" , "td")+makeColumn(column-1);
+		}
+	}
+
+	// Generate first row of calendar
+	function makeHead(){
+		// Needed Variables
+		var headArray = ['Time', 'Monday', 'Tuesday', 'Wednesday' , 'Thursday' , 'Friday'];
+		var i;
+
+		// Return string
+		head = "";
+
+		// Create first columns
+		for (i=0; i<headArray.length ; i++){
+			if (i === 0){
+				head = changeClass(head.concat( wrap(headArray[i], "td")) , "time scheduleHead");
+			}
+			else{
+				head = changeClass(head.concat( wrap(headArray[i], "td")) , "scheduleHead");
+			}	
+		}
+
+		// Wrap to make first row
+		head = wrap(head , "tr" , "");
+
+		return head;
+	}
+
+	function changeClass(string , aClass){
+		return string.replace("defaultClass", aClass);
+	}
+
+	function changeId(string , aId){
+		return string.replace("defaultId", aId);
+	}
+
+	function insertItem(day , startTime, endTime){
+		// Create map from day to column
+		var dayToIndex = {"Monday" : 1 , "Tuesday" : 2 , "Wednesday" : 3 , "Thursday" : 4 , "Friday" : 5 };
+
+		// Create map from start time to row
+		var startToIndex = {};
+		var index = 0;
+		$(".time").each(function(){
+			if ($(this).text() != "Time"){
+				startToIndex[$(this).text()] = index++;
+			}
+		});
+
+		var nmbrOfRows = startToIndex[endTime] - startToIndex[startTime];
+
+		// NEED FINISHING
+		// REMOVE USELESS TD
+		// SET ROW SPAN
+
+	}
+
+
+</script>
+
+{% endblock %}

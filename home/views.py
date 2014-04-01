@@ -14,6 +14,9 @@ def index(request):
    else:
       return login_view(request)
 
+@login_required
+def schedule(request):
+  return render(request , 'home/schedule.html', {})
 
 @login_required
 def student_record(request):
