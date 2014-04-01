@@ -139,7 +139,7 @@ function searchCode(){
 						<tr>
 						<td><a href="/course-details/{{course.course_code}}" class="btn btn-default btn-block" data-toggle="tooltip" title="Click for details">{{course.course_code}}</a></td>
 						<td>{{course.course_name}}</td>
-						<td><a href="#" onclick="setTimeout(window.document.location='',10000);">{% shopping_cart_add_button course.course_id %}</a></td>
+						<td>{% shopping_cart_add_button course.course_id %}</td>
 						</tr>
 						{% endfor %}
 					</table>	
@@ -150,19 +150,8 @@ function searchCode(){
 		<div class="col-md-2">
 			<h3 class="inline"> Current Wishlist </h3>
 			</br></br>
-			<table class="table table-striped table-bordered">
-			{% if shoppingCart %}
-				{% for course in shoppingCart %}
-					<tr>
-						<td><b>{{course.course_code}} </b> -
-						{{course.course_name}}</td>
-					</tr>
-				{% endfor %}
-			{% else %}
-				<tr>
-					<td>Your wishlist is currently empty</td>
-				</tr>
-			{% endif %}
+			<table id="wishlist-sidebar" class="table table-striped table-bordered">
+            <tr><td>...</tr></td>
 			</table>
 		</div>
 	</div>
