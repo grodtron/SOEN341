@@ -73,7 +73,7 @@ function dropDownAndHide(field1,field2) {
 						<p><em><b>Prerequisites:</b></em> ||
 						{% if prereqs %}
 							{% for prereq in prereqs %}
-							<a href="{{ prereq.requisite_course.course_code }}">{{ prereq.requisite_course.course_code }} </a> ||
+									<a href="{{ prereq.requisite_course.course_code }}">{{ prereq.requisite_course.course_code }} </a> ||
 							{% endfor %}
 						{% else %}
 							None ||
@@ -85,7 +85,13 @@ function dropDownAndHide(field1,field2) {
 				<tr id="cCoreq">
 					<td class="course-details-content-width">
 						<p><em><b>Corequisites:</b></em> ||
-						None ||
+						{% if coreqs %}
+							{% for coreq in coreqs %}
+									<a href="{{ coreq.requisite_course.course_code }}">{{ coreq.requisite_course.course_code }} </a> ||
+							{% endfor %}
+						{% else %}
+							None ||
+						{% endif %}
 							<input type="button" class="moreButton" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="hide"/>
 						</p>
 					</td>
@@ -273,6 +279,12 @@ function dropDownAndHide(field1,field2) {
 						{% endif %}
 					{% endif %}
 				{% endfor %}
+			{% else %}
+				<tr>
+					<td colspan="7">
+						Information not available
+					</td>
+				</tr>
 			{% endif %}
 			</table>
 			</br>
