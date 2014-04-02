@@ -1,6 +1,7 @@
 {% extends "home/base.html" %}
 
 {% load staticfiles %}
+{% load shopping_cart_tags %}
 
 {% block title %}Shopping Cart{% endblock %}
 
@@ -21,10 +22,7 @@
          <td><h4>{{course.course.course_code}}</h4></td>
          <td><h4>{{course.course.course_name}}</h4></td>
       <td>
-         <form action="/shopping-cart/do-remove" method="post">
-            <input type="hidden" name="course" value="{{ course.course.course_id }}">
-            <button class="btn btn-default" type="submit">remove</button>
-         </form>
+         {% shopping_cart_add_button course.course.course_id %}
       </td>
       </tr>
          {% for section in course.sections %}
