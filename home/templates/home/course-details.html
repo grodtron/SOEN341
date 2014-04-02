@@ -73,7 +73,11 @@ function dropDownAndHide(field1,field2) {
 						<p><em><b>Prerequisites:</b></em> ||
 						{% if prereqs %}
 							{% for prereq in prereqs %}
+								{% if prereq.requisite_course.course_code != ""%}
 									<a href="{{ prereq.requisite_course.course_code }}">{{ prereq.requisite_course.course_code }} </a> ||
+								{% else %}
+								None ||
+								{% endif %}
 							{% endfor %}
 						{% else %}
 							None ||
@@ -87,7 +91,11 @@ function dropDownAndHide(field1,field2) {
 						<p><em><b>Corequisites:</b></em> ||
 						{% if coreqs %}
 							{% for coreq in coreqs %}
+								{% if coreq.requisite_course.course_code  != ""%}
 									<a href="{{ coreq.requisite_course.course_code }}">{{ coreq.requisite_course.course_code }} </a> ||
+								{% else %}
+									None ||
+								{% endif %}
 							{% endfor %}
 						{% else %}
 							None ||
