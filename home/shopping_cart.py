@@ -27,8 +27,14 @@ def remove(request):
 
          cart.courses.remove(course)
 
+   return get_cart_dict(cart)
 
-   return redirect("/shopping-cart")
+
+def get_cart_dict(cart):
+   courses = cart.courses.values('course_id', 'course_code', 'course_name')
+
+   return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
+
 
 @login_required
 def add(request):
@@ -40,19 +46,13 @@ def add(request):
       cart.courses.add(course)
       cart.save()
 
-      courses = cart.courses.values_list('course_id', flat=True)
+   return get_cart_dict(cart)
 
-      return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
-   else:
-      return HttpResponse("[]", content_type="application/json")
 
+@login_required
 def get_cart(request):
     if request.user.is_authenticated():
-        cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+       cart, created = ShoppingCart.objects.get_or_create(user=request.user)
 
-        courses = cart.courses.values_list('course_id', flat=True)
-
-        return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
-    else:
-        return HttpResponse("[]", content_type="application/json")
+    return get_cart_dict(cart)
    

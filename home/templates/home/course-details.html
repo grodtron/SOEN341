@@ -43,7 +43,7 @@ function dropDownAndHide(field1,field2) {
 				<tr>
 					<td>
 						<h3>{{ course.course_code }} - {{ course.course_name }}
-							<a href="#" onclick="setTimeout(window.document.location='',10000);">{% shopping_cart_add_button course.course_id %}</a>
+							{% shopping_cart_add_button course.course_id %}
 							<button class="moreButton" onclick="dropDown('cDescription')">&#8711;</button>
 						</h3>
 					</td>
@@ -55,60 +55,12 @@ function dropDownAndHide(field1,field2) {
 			</table>
 			<div class="course-details-buttons">
 				<ul class="course-details-button-list">
-					<!--
-					<li id="ddTeachers" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="Teachers"/></li>
-					-->
-					<li id="ddSections" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cSections','ddSections')" value="Sections"/></li>
 					<li id="ddCredits" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cCredits', 'ddCredits')" value="Credits"/></li>
 					<li id="ddPrereq" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cPrereq', 'ddPrereq')" value="Prerequisites"/></li>
 					<li id="ddCoreq" style="display:none;"><input type="button" class="btn" onclick="dropDownAndHide('cCoreq', 'ddCoreq')" value="Corequisites"/></li>
 				</ul>
 			</div>
 			<table class="table table-striped table-bordered">
-				<!--
-				<tr id="cTeachers">
-					<td class="course-details-content-width">
-						<p><em><b>Teachers:</b></em> ||
-						{% if scheduleItems %}
-							{% for scheduleItem in scheduleItems %}
-								{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }} ||
-							{% endfor %}
-						{% else %}
-							None ||
-						{% endif %}
-							<input type="button" class="moreButton" onclick="dropDownAndHide('cTeachers','ddTeachers')" value="hide"/>
-						</p>
-					</td>
-				</tr>
-				-->
-				<tr id="cSections">
-					<td class="course-details-content-width">
-						<p><em><b>Sections:</b></em> 
-						{% if scheduleItems %}
-							{% for scheduleItem in scheduleItems %}
-								{{ scheduleItem.section }} -
-								{{ scheduleItem.instructor.instructor_fname }} {{ scheduleItem.instructor.instructor_lname }}
-								{% if scheduleItem.instructor.instructor_fname != "" %}
-									 <em><b> : Schedule Items: </b></em>||
-									{% for scheduleItemTimes in scheduleItemsTimes %}
-										{% if scheduleItemTimes.schedule_item == scheduleItem %}
-											{{ scheduleItem.item_type.item_type_name }}
-											{{ scheduleItemTimes.day.day_name }}
-											{{ scheduleItemTimes.start }} - {{ scheduleItemTimes.end }} || 
-										{% endif %}
-									{% endfor %}
-								{% else %}
-									Information not available
-								{% endif %}
-								</br>
-							{% endfor %}
-						{% else %}
-							Information not available
-						{% endif %}
-						<input type="button" class="moreButton" onclick="dropDownAndHide('cSections','ddSections')" value="hide"/>
-						</p>
-					</td>
-				</tr>
 				<tr id="cCredits">
 					<td class="course-details-content-width">
 						<p><em><b>Credits:</b></em> {{course.course_credits}}
@@ -139,25 +91,208 @@ function dropDownAndHide(field1,field2) {
 					</td>
 				</tr>
 			</table>
+			<table class="table table-striped table-bordered">
+				<tr>
+					<td>
+						<h4>
+							Type
+						</h4>
+					</td>
+					<td>
+						<h4>
+							Sections
+						</h4>
+					</td>
+					<td>
+						<h4>
+							Days
+						</h4>
+					</td>
+					<td>
+						<h4>
+							Start
+						</h4>
+					</td>
+					<td>
+						<h4>
+							End
+						</h4>
+					</td>
+					<td>
+						<h4>
+							Room
+						</h4>
+					</td>
+					<td>
+						<h4>
+							Instructor
+						</h4>
+					</td>
+				</tr>
+				{% if scheduleItems %}
+					{% for scheduleItem in scheduleItems %}
+						{% if scheduleItem.item_type.item_type_name == "Lec" %}
+							<tr>
+								<td>
+									{{  scheduleItem.item_type.item_type_name }}
+								</td>
+								<td>
+									{{  scheduleItem.section }}
+								</td>
+								<td>
+									{% for scheduleItemTimes in scheduleItemsTimes %}
+										{% if scheduleItemTimes.schedule_item ==  scheduleItem %}
+											{{ scheduleItemTimes.day.day_name }} </br>
+										{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for scheduleItemTimes in scheduleItemsTimes %}
+											{% if scheduleItemTimes.schedule_item == scheduleItem %}
+												{{ scheduleItemTimes.start }}  </br>
+											{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for scheduleItemTimes in scheduleItemsTimes %}
+											{% if scheduleItemTimes.schedule_item ==  scheduleItem %}
+												{{ scheduleItemTimes.end }} </br>
+											{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+									{% for location in locations %}
+											{% if location ==  scheduleItem.location %}
+												{{ location.campus }} - {{location.room_number}}
+											{% endif %}
+									{% endfor %}
+								</td>
+								<td>
+								{{ scheduleItem.instructor.instructor_fname }} 
+								{{ scheduleItem.instructor.instructor_lname }}
+								</td>
+							</tr>
+						{% endif %}
+						{% if scheduleItemsGroups %}
+						<script>
+						var tutSection = "";
+							{% for scheduleItemsGroup in scheduleItemsGroups %}
+								{% if scheduleItem.section == scheduleItemsGroup.lecture.section %}
+									{% if scheduleItemsGroup.tutorial %}
+										if( tutSection != "{{ scheduleItemsGroup.tutorial.section }}" ) {
+											document.write(""
+											+ "<tr>"
+											+ "<td>"
+											+ "	{{ scheduleItemsGroup.tutorial.item_type.item_type_name }}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{{ scheduleItemsGroup.lecture.section }} {{ scheduleItemsGroup.tutorial.section }}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "		{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "			{{ scheduleItemTimes.day.day_name }} </br>"
+											+ "		{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "			{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "				{{ scheduleItemTimes.start }} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for scheduleItemTimes in scheduleItemsTimes %}"
+											+ "			{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.tutorial %}"
+											+ "				{{ scheduleItemTimes.end }} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "	{% for location in locations %}"
+											+ "			{% if location == scheduleItemsGroup.tutorial.location %}"
+											+ "				{{ location.campus }} - {{location.room_number}} </br>"
+											+ "			{% endif %}"
+											+ "	{% endfor %}"
+											+ "</td>"
+											+ "<td>"
+											+ "{{ scheduleItemsGroup.tutorial.instructor.instructor_fname }} "
+											+ "{{ scheduleItemsGroup.tutorial.instructor.instructor_lname }}"
+											+ "</td>"
+											+ "</tr>")
+										}
+										tutSection = "{{ scheduleItemsGroup.tutorial.section }}";
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						</script>
+							{% for scheduleItemsGroup in scheduleItemsGroups %}
+								{% if scheduleItem.section == scheduleItemsGroup.lecture.section %}
+									{% if scheduleItemsGroup.lab %}
+										<tr>
+											<tr>
+											<td>
+												{{ scheduleItemsGroup.lab.item_type.item_type_name }}
+											</td>
+											<td>
+												{{ scheduleItemsGroup.lecture.section }} {{ scheduleItemsGroup.tutorial.section }} {{ scheduleItemsGroup.lab.section }}
+											</td>
+											<td>
+												{% for scheduleItemTimes in scheduleItemsTimes %}
+													{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.lab %}
+														{{ scheduleItemTimes.day.day_name }} </br>
+													{% endif %}
+												{% endfor %}
+											</td>
+											<td>
+												{% for scheduleItemTimes in scheduleItemsTimes %}
+														{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.lab %}
+															{{ scheduleItemTimes.start }} </br>
+														{% endif %}
+												{% endfor %}
+											</td>
+											<td>
+												{% for scheduleItemTimes in scheduleItemsTimes %}
+														{% if scheduleItemTimes.schedule_item == scheduleItemsGroup.lab %}
+															{{ scheduleItemTimes.end }} </br>
+														{% endif %}
+												{% endfor %}
+											</td>
+											<td>
+												{% for location in locations %}
+														{% if location == scheduleItemsGroup.lab.location %}
+															{{ location.campus }} - {{location.room_number}} </br>
+														{% endif %}
+												{% endfor %}
+											</td>
+											<td>
+											{{ scheduleItemsGroup.lab.instructor.instructor_fname }} 
+											{{ scheduleItemsGroup.lab.instructor.instructor_lname }}
+											</td>
+										</tr>
+									{% endif %}
+								{% endif %}
+							{% endfor %}
+						{% endif %}
+					{% endfor %}
+				{% else %}
+					<tr>
+						<td colspan="7">
+							Information not available
+						</td>
+					</tr>
+				{% endif %}
+			</table>
 			</br>
 			<a class="btn" href="../course-selection/"><button class="btn">Back to Course List</button></a>
 			</br></br></br></br>
 		</div>
-		<div class="course-details-sidebar">
-			<h3> Current Wishlist </h3>
-			<table class="table table-striped table-bordered">
-			{% if shoppingCart %}
-				{% for course in shoppingCart %}
-					<tr>
-						<td><b>{{course.course_code}} </b> -
-						{{course.course_name}}</td>
-					</tr>
-				{% endfor %}
-			{% else %}
-				<tr>
-					<td>Your wishlist is currently empty</td>
-				</tr>
-			{% endif %}
+		<div class="col-md-2">
+			<h3 class="inline"> Current Wishlist </h3>
+			</br></br>
+			<table id="wishlist-sidebar" class="table table-striped table-bordered">
+            <tr><td>...</tr></td>
 			</table>
 		</div>
 	</div>

@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
-from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord, ShoppingCart
+from home.models import Course, CourseRequisites, ScheduleItem, ScheduleItemTime, Term, StudentRecord, ShoppingCart, ScheduleItemGroup, Location
 
 from login import login_view
 from datetime import date
@@ -31,35 +31,20 @@ def student_record(request):
 
 @login_required
 def course_selection(request,program=None):
+    shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
+    shopping_cart = shopping_cart.courses.all()
     if program != None:
         programcourses = Course.objects.filter(course_code__startswith=program).exclude(
             course_name__exact="None",
             description__exact="None"
         ).order_by('course_code')
-
-        everycourse = Course.objects.exclude(
-            course_name__exact="None",
-            description__exact="None"
-        ).order_by('course_code')
-
-        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(programcourses),
-            "allcourses"   : list(everycourse),
             "shoppingCart" : shopping_cart
         }
     else:
-        everycourse = Course.objects.exclude(
-            course_name__exact="None",
-            description__exact="None"
-        ).order_by('course_code')
-
-        shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
-        shopping_cart = shopping_cart.courses.all()
         context = {
             "courses"   : list(),
-            "allcourses"   : list(everycourse),
             "shoppingCart" : shopping_cart
         }
     return render(request, 'home/course-selection.html', context)
@@ -76,9 +61,17 @@ def course_details(request, course_code):
     scheduleItems = ScheduleItem.objects.filter(
         course__exact=course
     )
+    scheduleItemsGroups = ScheduleItemGroup.objects.filter(
+        course__exact= course
+    )
     scheduleItemsTimes = ScheduleItemTime.objects.filter(
         schedule_item__exact=scheduleItems
     )
+    
+    locations = Location.objects.filter(
+        
+    )
+    
     department_temp = course_code
     
     shopping_cart, created = ShoppingCart.objects.get_or_create(user=request.user)
@@ -90,7 +83,9 @@ def course_details(request, course_code):
         "scheduleItems"        : list(scheduleItems),
         "scheduleItemsTimes"   : list(scheduleItemsTimes),
         "department"           : department_temp,
-        "shoppingCart"         : shopping_cart
+        "shoppingCart"         : shopping_cart,
+        "scheduleItemsGroups"  : list(scheduleItemsGroups),
+        "locations"            : list(locations)
     }
     return render(request, 'home/course-details.html', context)
         
