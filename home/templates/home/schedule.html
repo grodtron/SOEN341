@@ -18,8 +18,37 @@
 		$.ajax().done(function(){
 			$("#calendar thead").append(makeHead());
 
+
 			$("#calendar tbody").append(makeRows(startTime));
 		});
+
+      $.ajax("/register/get-courses",
+         {
+            dataType:"json",
+            success:function(data){
+               $.each(data, function(i, course){
+
+                  var iter_time = function(i, time){
+                     var el = insertItem(time.start, time.end, time.day);
+                     console.log("Inserted: ");
+                     console.log(el);
+                     el.append("<div class='container'>"
+                               + "<h3>" + course.course_info.code+"</h3>"
+                               + "</div>");
+                  }
+
+                  if("lec" in course){
+                     $.each(course.lec.times, iter_time);
+                 }
+                 if("tut" in course){
+                     $.each(course.tut.times, iter_time);
+                 }
+                 if("lab" in course){
+                     $.each(course.lab.times, iter_time);
+                 }
+               });
+            }
+         });
 	});
 
 	// Used to wrap string in specific tag
@@ -65,7 +94,7 @@
 
 	// Generates all the rows needed for schedule
 	function makeRows(time){
-		if (time === "20:30"){
+		if (time === "23:30"){
 			return wrap( changeClass(wrap(time , "td") , "time") +makeColumn(5) , "tr");
 		}
 		else{
@@ -118,6 +147,13 @@
 		return string.replace("defaultId", aId);
 	}
 
+   // from: stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
+   String.prototype.lpad = function(padString, length) {
+       var str = this;
+       while (str.length < length)
+           str = padString + str;
+       return str;
+   }
 
 	// Inserts a class into schedule at day with prescribed start and end times
 	function insertItem( startTime, endTime, day ){
@@ -133,13 +169,20 @@
 			}
 		});
 
+      // Round to nearest 15 minutes:
+      startTime = startTime.split(':');
+      startTime = startTime[0] + ':' + String(Math.round(startTime[1]/15)*15).lpad("0",2);
+      // Round to nearest 15 minutes:
+      endTime = endTime.split(':');
+      endTime = endTime[0] + ':' + String(Math.round(endTime[1]/15)*15).lpad("0",2);
+
+
 		// Set parameter to remove needed td
 		var startRow = startToIndex[startTime]+1;
 		var endRow = startToIndex[endTime];
 		
 		// Get number of rows needed for new td rowspan
 		var nmbrOfRows = startToIndex[endTime] - startToIndex[startTime] + 1;
-
 		
 		$.ajax().done(function(){
 
@@ -151,6 +194,13 @@
 			// Change rowspan of selected td
 			$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan" , nmbrOfRows);
 		});		
+
+		// Change rowspan of selected td
+      var td = $("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")");
+      td.attr("rowspan" , nmbrOfRows);
+
+      // Return the td so that we can manipulate it
+      return td;
 	}
 
 	function removeItem(startTime , day){

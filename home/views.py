@@ -56,8 +56,15 @@ def course_details(request, course_code):
         course_code__exact=course_code
     )
     prerequisites = CourseRequisites.objects.filter(
-        course__exact=course
+        course__exact=course,
+		prerequisite__exact=1
     )
+    
+    corequisites = CourseRequisites.objects.filter(
+        course__exact=course,
+        prerequisite__exact=0
+    )
+	
     scheduleItems = ScheduleItem.objects.filter(
         course__exact=course
     )
@@ -80,6 +87,7 @@ def course_details(request, course_code):
     context = {
         "course"               : course[0],
         "prereqs"              : list(prerequisites),
+        "coreqs"               : list(corequisites),
         "scheduleItems"        : list(scheduleItems),
         "scheduleItemsTimes"   : list(scheduleItemsTimes),
         "department"           : department_temp,

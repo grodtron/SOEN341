@@ -5,15 +5,36 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
-from home.models import ShoppingCart, Course
+from home.models import ShoppingCart, Course, ScheduleItemGroup
 
 @login_required
 def shopping_cart(request):
    cart, created = ShoppingCart.objects.get_or_create(user=request.user)
 
-   courses = cart.courses.all()
+   courses = cart.courses.all().order_by('course_id')
 
-   context = {"courses":courses}
+   groups = ScheduleItemGroup.objects.select_related(
+         'lecture','lab','tutorial'
+   ).filter(course__in=courses, ).order_by('course')
+
+   group_iter = iter(groups) 
+
+   course_list = []
+   g = next(group_iter)
+
+   for course in courses:
+      d = {"course":course}
+      l = []
+      try:
+         while g.course == course:
+            l.append(g)
+            g = next(group_iter)
+      except StopIteration:
+         pass
+      d["sections"] = l
+      course_list.append(d)
+
+   context = {"courses":course_list}
 
    return render(request, "shopping-cart/view.html", context)
 

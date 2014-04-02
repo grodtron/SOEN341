@@ -9,18 +9,55 @@
 <tbody>
 {% for course in courses %}
 <tr>
-<td>{{course.course_code}}</td>
-<td>{{course.course_name}}</td>
+   <td><h4>{{course.course.course_code}}</h4></td>
+   <td><h4>{{course.course.course_name}}</h4></td>
 <td>
    <form action="/shopping-cart/do-remove" method="post">
-      <input type="hidden" name="course" value="{{ course.course_id }}">
+      <input type="hidden" name="course" value="{{ course.course.course_id }}">
       <button class="btn btn-default" type="submit">remove</button>
    </form>
 </td>
 </tr>
+   {% for section in course.sections %}
+      <tr>
+         <td>
+            {{section.term.term_name }}
+         </td>
+         <td>
+            {{ section.lecture.section  }}
+            {{ section.tutorial.section }}
+            {{ section.lab.section      }}
+         </td>
+         <td>
+            <button class="btn btn-success btn-reg" style="width:16px;height16px;" data-id="{{ section.row_id }}">+</button>
+         </td>
+      </tr>
+   {% endfor %}
 {% endfor %}
 </tbody>
 </table>
 </div>
+
+<script type="text/javascript">
+   $(document).ready(function(){
+      
+      $(".btn-reg").bind("click", function(){
+
+         $.ajax("/register/do-add",
+         {
+            method:"POST",
+            data:{id:$(this).data("id")},
+            success:function(data){
+               alert("Success: " + data.success);
+            },
+            error:function(data){
+               alert("Error: " + data.responseJSON.error);
+            }
+         });
+
+      });
+
+   });
+</script>
 
 {% endblock %}
