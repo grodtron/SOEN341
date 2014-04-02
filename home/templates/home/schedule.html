@@ -15,9 +15,11 @@
 	$( document ).ready(function() {
 		var startTime = "8:45";
 
-		$("#calendar thead").append(makeHead())
+		$.ajax().done(function(){
+			$("#calendar thead").append(makeHead());
 
-		$("#calendar tbody").append(makeRows(startTime));
+			$("#calendar tbody").append(makeRows(startTime));
+		});
 	});
 
 	// Used to wrap string in specific tag
@@ -135,16 +137,20 @@
 		var startRow = startToIndex[startTime]+1;
 		var endRow = startToIndex[endTime];
 		
-		// Hide needed td elements
-		for (startRow ; startRow<=endRow ; startRow++){
-			$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").css("display" , "none");
-		}
-
 		// Get number of rows needed for new td rowspan
 		var nmbrOfRows = startToIndex[endTime] - startToIndex[startTime] + 1;
 
-		// Change rowspan of selected td
-		$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan" , nmbrOfRows);
+		
+		$.ajax().done(function(){
+
+			// Hide needed td elements
+			for (startRow ; startRow<=endRow ; startRow++){
+				$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").css("display" , "none");
+			}
+
+			// Change rowspan of selected td
+			$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan" , nmbrOfRows);
+		});		
 	}
 
 	function removeItem(startTime , day){
@@ -161,16 +167,20 @@
 			}
 		});
 
-		// Remove display='none' from needed td elements
+		// Get needed values
 		var startRow = startToIndex[startTime]+1;
 		var endRow = parseInt($("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan")) + startRow - 1;
 
-		for (startRow ; startRow<endRow ; startRow++){
-			$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").removeAttr("style");
-		}
+		$.ajax().done(function(){
 
-		// Remove rowspan attribute
-		$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").removeAttr("rowspan");
+			// Remove display='none' from needed td elements
+			for (startRow ; startRow<endRow ; startRow++){
+				$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").removeAttr("style");
+			}
+
+			// Remove rowspan attribute
+			$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").removeAttr("rowspan");
+		});
 	}
 
 	// Check if specific time slot is available
