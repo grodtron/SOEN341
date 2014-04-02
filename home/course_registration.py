@@ -9,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 
 from home.models import ShoppingCart, Course, StudentSchedule, ScheduleItemGroup, ScheduleItemTime
 
+def json_response(code, data):
+   return HttpResponse(json.dumps(data), status=code, content_type="application/json")
+
 def fill_schedule_item_dict(item):
 
    """This function creates a dictionary for the given ScheduleItem
@@ -78,7 +81,7 @@ def get_registered_courses(request):
 
       courses.append(course_dict)
 
-   return HttpResponse(json.dumps(list(courses)), content_type="applicationn/json")
+   return json_response(200, list(courses))
 
 
 def get_schedule_items_for_schedule_item_group(group):
@@ -97,47 +100,78 @@ def get_schedule_items_for_schedule_item_group(group):
       pass
    return l
 
+def get_current_registered_times(request):
+   # Get all ScheduleItemGroups for which the user is currently registered
+   curr_item_groups = StudentSchedule.objects.select_related(
+            'schedule_item_group'
+         ).filter(
+            user__exact=request.user
+         )
+
+   # Get all ScheduleItems for those ScheduleItemGroups
+   curr_items = [
+         get_schedule_items_for_schedule_item_group(_.schedule_item_group)
+         for _ in curr_item_groups
+   ]
+
+   # Flatten it into one list
+   # e.g.: [(1,2,3),(4,5),(6,7,8)] => [1,2,3,4,5,6,7,8]
+   curr_items = reduce(lambda a, b: a+b, curr_items)
+
+   # Get all ScheduleItemTimes for those ScheduleItems
+   curr_times = ScheduleItemTime.objects.filter(schedule_item__in=curr_items)
+
+   # Create a dictionary of schedule items by day
+   days = {}
+   for time in curr_times:
+      if time.day.day_name in days:
+         days[time.day.day_name].append(time)
+      else:
+         days[time.day.day_name] = [time]
+   
+   return days
+
 @login_required
 def register_for_course(request):
-   #if request.POST:
+   if request.POST:
       id = request.POST.get("id")
       try:
-         sched_group = ScheduleItemGroup.objects.get(row_id__exact=id)
+         requested_group = ScheduleItemGroup.objects.select_related(
+               'lecture','tutorial','lab'
+         ).get(row_id__exact=id)
       except ObjectDoesNotExist:
-         data = {"error":"course with id '"+str(id)+"' does not exist"}
+         return json_response(400, {"error":"course with id '"+str(id)+"' does not exist"})
 
-      curr_item_groups = StudentSchedule.objects.select_related(
-               'schedule_item_group'
-            ).filter(
-               user__exact=request.user
-            )
+      requested_items = get_schedule_items_for_schedule_item_group(requested_group)
 
-      # such bad hackery. wow.
-      curr_items = [
-            get_schedule_items_for_schedule_item_group(_.schedule_item_group)
-            for _ in curr_item_groups
-      ]
+      requested_times = ScheduleItemTime.objects.filter(schedule_item__in=requested_items)
 
-      curr_items = reduce(lambda a, b: a+b, curr_items)
+      current_registered_times = get_current_registered_times(request)
 
-      curr_items = [item.schedule_item_id for item in curr_items]
+      for time in requested_times:
+         potential_conflicts = current_registered_times[time.day.day_name]
 
-      curr_times = ScheduleItemTime.objects.select_related().filter(schedule_item__in=curr_items)
+         for potential_conflict in potential_conflicts:
+            if not ((
+                  time.start > potential_conflict.end and
+                  time.end   > potential_conflict.end
+               ) or (
+                  time.start < potential_conflict.start and
+                  time.end   < potential_conflict.start
+            )):
+               # TODO - indicate the conflicting class
+               return json_response(409, {"error" : "there is a conflict"})
 
-      days = {}
+      # Here we have checked for conflicts and there's none, so we'll move on
 
-      for time in curr_times:
-         if time.day.day_name in days:
-            days[time.day.day_name].append(time)
-         else:
-            days[time.day.day_name] = [time]
+      StudentSchedule.objects.create(
+            schedule_item_group=requested_group,
+            user=request.user)
       
-      return HttpResponse(json.dumps(curr_item_groups), content_type="applicationn/json")
-       
+      return json_response(200, {"success":"Successfully registered"})
 
-       
-   #else:
-   #   data = {"error":"no data sent"}
+   else:
+      return json_response(400, {"error" : "no data sent"})
 
 
 
