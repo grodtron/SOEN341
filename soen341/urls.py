@@ -29,4 +29,5 @@ urlpatterns = patterns('',
 
     url(r'^register/get-courses$','home.course_registration.get_registered_courses', name='get registered courses'),
     url(r'^register/do-add$','home.course_registration.register_for_course', name='get registered courses'),
+    url(r'^register/do-remove$','home.course_registration.remove', name='remove course'),
 )

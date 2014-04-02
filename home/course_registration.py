@@ -27,8 +27,8 @@ def fill_schedule_item_dict(item):
    for time in times:
       t.append({
             "day"   : time.day.day_name,
-            "start" : str(time.start),
-            "end"   : str(time.end)
+            "start" : str(time.start.hour)+':'+str(time.start.minute).zfill(2),
+            "end"   : str(time. end .hour)+':'+str(time. end .minute).zfill(2)
          })
 
    d["times"] = t
@@ -49,10 +49,11 @@ def get_registered_courses(request):
       course_dict = {}
 
       course_dict["course_info"] = {
-         "id"      : group.course.course_id,
-         "code"    : group.course.course_code,
-         "name"    : group.course.course_name,
-         "credits" : float(group.course.course_credits)
+         "schedule_item_group_id" : group.row_id,
+         "course_id" : group.course.course_id,
+         "code"      : group.course.course_code,
+         "name"      : group.course.course_name,
+         "credits"   : float(group.course.course_credits)
       }
 
       try:
@@ -116,7 +117,7 @@ def get_current_registered_times(request):
 
    # Flatten it into one list
    # e.g.: [(1,2,3),(4,5),(6,7,8)] => [1,2,3,4,5,6,7,8]
-   curr_items = reduce(lambda a, b: a+b, curr_items)
+   curr_items = reduce(lambda a, b: a+b, curr_items, [])
 
    # Get all ScheduleItemTimes for those ScheduleItems
    curr_times = ScheduleItemTime.objects.filter(schedule_item__in=curr_items)
@@ -149,7 +150,10 @@ def register_for_course(request):
       current_registered_times = get_current_registered_times(request)
 
       for time in requested_times:
-         potential_conflicts = current_registered_times[time.day.day_name]
+         try:
+            potential_conflicts = current_registered_times[time.day.day_name]
+         except KeyError:
+            continue
 
          for potential_conflict in potential_conflicts:
             if not ((
@@ -174,7 +178,32 @@ def register_for_course(request):
       return json_response(400, {"error" : "no data sent"})
 
 
+@login_required
+def remove(request):
+   if request.POST:
+      id = request.POST.get("id")
+      try:
+         requested_group = ScheduleItemGroup.objects.get(row_id__exact=id)
+      except ObjectDoesNotExist:
+         return json_response(400, {"error":"course with id '"+str(id)+"' does not exist"})
 
+      try:
+         StudentSchedule.objects.get(
+               schedule_item_group__exact=requested_group,
+               user__exact=request.user
+         ).delete()
+      except ObjectDoesNotExist:
+         return json_response(400, {"error":"you were not registered for course with id'" + str(id) + "'"})
+      
+      return json_response(200, {"success":"Successfully removed"})
+
+   else:
+      return json_response(400, {"error" : "no data sent"})
+
+
+@login_required
+def main(request):
+   return render(request, 'registration/main.html', {})
 
 
 
