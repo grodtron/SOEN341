@@ -10,6 +10,16 @@
 </div>
 
 <script>
+
+	// Create Schedule Table
+	$( document ).ready(function() {
+		var startTime = "8:45";
+
+		$("#calendar thead").append(makeHead())
+
+		$("#calendar tbody").append(makeRows(startTime));
+	});
+
 	// Used to wrap string in specific tag
 	function wrap(string , tag){
 		pre = "<"+tag+" class='defaultClass' id='defaultId'>";
@@ -22,45 +32,38 @@
 		return returnString;
 	}
 
-	$( document ).ready(function() {
-		var startTime = "8:45";
-
-		$("#calendar thead").append(makeHead())
-
-		$("#calendar tbody").append(makeRows(startTime));
-	});
-
 	// Increments the time by 15 minutes
 	function increaseTime(time){
 
-		timeArray = time.split(":");
+		timeArray = time.split(":");	// split hour and minutes
 
 		var hour = parseInt(timeArray[0]);
 		var minute = parseInt(timeArray[1]);
 
-		if (minute < 45){
+		if (minute < 45){	// Increase time only if hour is not changing
 			minute += 15;
 		}
-		else{
-			hour += 1;
+		else{				// If hour change is needed
+			hour += 1;		// Change hour and reset minutes
 			minute = 0;
 		}
 
-		if(minute == 0){
+		if(minute == 0){	// Format minutes to display correctly
 			minute = "00";
 		}
 		else{
 			minute = minute.toString();
 		}
 
-		var returnTime = (hour.toString()).concat(":"+minute);
+		var returnTime = (hour.toString()).concat(":"+minute); 
 
 		return returnTime;
 
 	}
 
+	// Generates all the rows needed for schedule
 	function makeRows(time){
-		if (time === "10:30"){
+		if (time === "20:30"){
 			return wrap( changeClass(wrap(time , "td") , "time") +makeColumn(5) , "tr");
 		}
 		else{
@@ -68,6 +71,7 @@
 		}
 	}
 
+	// Generates all the empty td elements needed 
 	function makeColumn(column){
 		if (column == 1){
 			return wrap("" , "td");
@@ -102,15 +106,19 @@
 		return head;
 	}
 
+	// Used to change class of schedule table elements
 	function changeClass(string , aClass){
 		return string.replace("defaultClass", aClass);
 	}
 
+	// Used to change id of schedule table elements
 	function changeId(string , aId){
 		return string.replace("defaultId", aId);
 	}
 
-	function insertItem(day , startTime, endTime){
+
+	// Inserts a class into schedule at day with prescribed start and end times
+	function insertItem( startTime, endTime, day ){
 		// Create map from day to column
 		var dayToIndex = {"Monday" : 1 , "Tuesday" : 2 , "Wednesday" : 3 , "Thursday" : 4 , "Friday" : 5 };
 
@@ -123,14 +131,88 @@
 			}
 		});
 
-		var nmbrOfRows = startToIndex[endTime] - startToIndex[startTime];
+		// Set parameter to remove needed td
+		var startRow = startToIndex[startTime]+1;
+		var endRow = startToIndex[endTime];
+		
+		// Hide needed td elements
+		for (startRow ; startRow<=endRow ; startRow++){
+			$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").css("display" , "none");
+		}
 
-		// NEED FINISHING
-		// REMOVE USELESS TD
-		// SET ROW SPAN
+		// Get number of rows needed for new td rowspan
+		var nmbrOfRows = startToIndex[endTime] - startToIndex[startTime] + 1;
 
+		// Change rowspan of selected td
+		$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan" , nmbrOfRows);
 	}
 
+	function removeItem(startTime , day){
+
+		// Create map from day to column
+		var dayToIndex = {"Monday" : 1 , "Tuesday" : 2 , "Wednesday" : 3 , "Thursday" : 4 , "Friday" : 5 };
+
+		// Create map from start time to row
+		var startToIndex = {};
+		var index = 0;
+		$(".time").each(function(){
+			if ($(this).text() != "Time"){
+				startToIndex[$(this).text()] = index++;
+			}
+		});
+
+		// Remove display='none' from needed td elements
+		var startRow = startToIndex[startTime]+1;
+		var endRow = parseInt($("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").attr("rowspan")) + startRow - 1;
+
+		for (startRow ; startRow<endRow ; startRow++){
+			$("tbody tr:eq("+startRow+") td:eq("+dayToIndex[day]+")").removeAttr("style");
+		}
+
+		// Remove rowspan attribute
+		$("tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").removeAttr("rowspan");
+	}
+
+	// Check if specific time slot is available
+	function available(time , day){
+
+		// Create map from day to column
+		var dayToIndex = {"Monday" : 1 , "Tuesday" : 2 , "Wednesday" : 3 , "Thursday" : 4 , "Friday" : 5 };
+
+		// Create map from start time to row
+		var startToIndex = {};
+		var index = 0;
+		$(".time").each(function(){
+			if ($(this).text() != "Time"){
+				startToIndex[$(this).text()] = index++;
+			}
+		});
+
+		var displayValue = $("tbody tr:eq("+startToIndex[time]+") td:eq("+dayToIndex[day]+")").css("display");
+		var rowspanValue = $("tbody tr:eq("+startToIndex[time]+") td:eq("+dayToIndex[day]+")").attr("rowspan");
+
+		if ( displayValue != "none" && rowspanValue == undefined){
+			return true;
+		}
+
+		return false;
+	}
+
+	// Check if all time slots are available
+	function checkAvailability(startTime , endTime , day){
+		// If all time slots where available
+		if (startTime == increaseTime(endTime)){
+			return true;
+		}
+		// Check if current time slot is available
+		if ( available(startTime , day) ){
+			// Recursive call , increasing time for next time slot
+			return checkAvailability( increaseTime(startTime) , endTime , day);
+		}
+		else{
+			return false;
+		}		
+	}
 
 </script>
 
