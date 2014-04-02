@@ -206,9 +206,6 @@ input:required:valid {
 }
 
 .scheduleContainer{
-	margin-right:0px;
-	width: 80%;
-	min-width: 500px;
 }
 
 .fixedWidth{
@@ -222,4 +219,17 @@ input:required:valid {
 .shopping-btn {
    width:32px;
    height:32px;
+}
+
+#wishlist {
+   width:100%;
+}
+
+#wishlist #code-col{
+   width:100px;
+}
+#wishlist #title-col{
+}
+#wishlist #button-col{
+   width:64px;
 }
