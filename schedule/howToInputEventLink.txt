@@ -1,0 +1,3 @@
+http://arshaw.com/fullcalendar/docs/event_data/
+
+this link will help you figure out how to input data into calendar
