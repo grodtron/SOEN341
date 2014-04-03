@@ -8,7 +8,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'home.views.index', name='home'),
     url(r'^student-record$', 'home.views.student_record', name='student-record'),
-    url(r'^schedule$', 'home.views.schedule' , name='schedule'),
 
 
     url(r'^course-selection$', 'home.views.course_selection', name='course-selection'),
@@ -31,3 +30,5 @@ urlpatterns = patterns('',
     url(r'^register/do-add$','home.course_registration.register_for_course', name='get registered courses'),
     url(r'^register/do-remove$','home.course_registration.remove', name='remove course'),
 )
+handler404 = 'mysite.views.my_custom_404_view'
+handler500 = 'mysite.views.my_custom_error_view'

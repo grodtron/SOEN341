@@ -200,6 +200,14 @@ input:required:valid {
 	padding:0px;
 }
 
+tbody>tr .time{
+	font-size: 11px;
+}
+
+.table-hover tbody tr:hover td{
+	background-color: #e4e4e4; 
+}
+
 .scheduleHead{
 	text-align:center;
 	background-color:#C2C2C2;
@@ -210,9 +218,10 @@ input:required:valid {
 
 .fixedWidth{
 	table-layout: fixed;
+
 }
 
-.table>tbody>tr>td{
+.fixedWidth>tbody>tr>td{
 	padding:0px;
 }
 
@@ -233,3 +242,14 @@ col.title-col{
 col.button-col{
    width:64px;
 }
+
+.noPad{
+	padding:0px;
+}
+
+.leftPad{
+	padding-top:10px;
+	padding-left:10px;
+	padding-right:0px;
+}
+
