@@ -20,7 +20,10 @@ def shopping_cart(request):
    group_iter = iter(groups) 
 
    course_list = []
-   g = next(group_iter)
+   try:
+      g = next(group_iter)
+   except StopIteration:
+      pass
 
    for course in courses:
       d = {"course":course}

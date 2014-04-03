@@ -234,12 +234,12 @@ tbody>tr .time{
    width:100%;
 }
 
-#wishlist #code-col{
+col.code-col{
    width:100px;
 }
-#wishlist #title-col{
+col.title-col{
 }
-#wishlist #button-col{
+col.button-col{
    width:64px;
 }
 
