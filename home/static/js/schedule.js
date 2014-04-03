@@ -10,31 +10,78 @@ $( document ).ready(function() {
       {
          dataType:"json",
          success:function(data){
-            $.each(data, function(i, course){
-
-               var iter_time = function(i, time){
-                  var el = insertItem(time.start, time.end, time.day);
-                  console.log("Inserted: ");
-                  console.log(el);
-                  el.append("<div class='container'>"
-                            + "<h3>" + course.course_info.code+"</h3>"
-                            + "</div>");
-               }
-
-               if("lec" in course){
-                  $.each(course.lec.times, iter_time);
-              }
-              if("tut" in course){
-                  $.each(course.tut.times, iter_time);
-              }
-              if("lab" in course){
-                  $.each(course.lab.times, iter_time);
-              }
-            });
+            $.each(data, insertCourse);
          }
       });
 
 });
+
+function insertCourse(i, course){
+   console.log(course);
+   
+   var cssClass          = "sched-group-" + course.course_info.schedule_item_group_id;
+   var cssOverBackground = "hsl("+((75*i)%360)+",100%,40%)";
+   var cssOutBackground  = "hsl("+((75*i)%360)+",100%,75%)"
+   var cssOverColor      = "#FFF";
+   var cssOutColor       = "#000";
+   var iter_time = function(code){
+      return function(j, time){
+         var el = insertItem(time.start, time.end, time.day);
+         console.log("Inserted: ");
+         console.log(el);
+         var div = $("<div></div>")
+            .css("display", "inline-block")
+            .css("position", "relative")
+            .css("width", "100%")
+            .css("padding", "10px")
+            .append("<h3>"+course.course_info.code+"</h3>")
+            .append("<p>"+code+"</p>");
+
+         var removeBtn = $("<a>x</a>")
+            .css("position","absolute")
+            .css("top","10px")
+            .css("right","10px");
+
+         div.append(removeBtn);
+
+         el.addClass(cssClass)
+            .css("background", cssOutBackground)
+            .css("color", cssOutColor)
+            .hover(
+               function(event){
+                  $("."+cssClass)
+                     .css("background", cssOverBackground)
+                     .css("color", cssOverColor);
+               },
+               function(event){
+                  $("."+cssClass)
+                     .css("background", cssOutBackground)
+                     .css("color", cssOutColor);
+               });
+
+         el.append(div);
+      }
+   }
+
+   if("lec" in course){
+      $.each(course.lec.times, iter_time(
+               "Lec - " +
+               course.lec.section));
+   }
+   if("tut" in course){
+      $.each(course.tut.times, iter_time(
+               "Tut - " +
+               course.lec.section + " " +
+               course.tut.section));
+   }
+   if("lab" in course){
+      $.each(course.lab.times, iter_time(
+               "Lab - " +
+               course.lec.section + " " +
+               course.tut.section + " " +
+               course.lab.section));
+   }
+}
 
 // Used to wrap string in specific tag
 function wrap(string , tag){
@@ -205,7 +252,9 @@ function removeItem(startTime , day){
    }
 
    // Remove rowspan attribute
-   $(".scheduleContainer tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")").removeAttr("rowspan");
+   $(".scheduleContainer tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")")
+      .removeAttr("rowspan")
+      .empty(); // clear out the content of the element
 }
 
 // Check if specific time slot is available
