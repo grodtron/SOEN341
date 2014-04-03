@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel='stylesheet' href='cupertino/jquery-ui.min.css' />
+<link href='../fullcalendar/fullcalendar.css' rel='stylesheet' />
+<link href='../fullcalendar/fullcalendar.print.css' rel='stylesheet' media='print' />
+<script src='../lib/jquery.min.js'></script>
+<script src='../lib/jquery-ui.custom.min.js'></script>
+<script src='../fullcalendar/fullcalendar.min.js'></script>
+<script>
+
+	$(document).ready(function () {
+
+
+         $('#calendar').fullCalendar({
+             header: {
+                 left: 'today',
+                 center: 'prev,title,next',
+                 right: 'month,basicDay'
+             },
+             slotMinutes: 30,
+             firstHour: 5,
+             editable: false,
+             timeFormat: 'H:mm',
+             firstday: 0, //Sunday0 Monday1..etc
+             allDayDefault : true,
+             
+
+
+     });
+ </script>
+<style>
+
+	body {
+		margin-top: 40px;
+		text-align: center;
+		font-size: 13px;
+		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+		}
+
+	#calendar {
+		width: 900px;
+		margin: 0 auto;
+		}
+
+</style>
+</head>
+<body>
+<div id='calendar'></div>
+</body>
+</html>
