@@ -15,10 +15,6 @@ def index(request):
       return login_view(request)
 
 @login_required
-def schedule(request):
-  return render(request , 'home/schedule.html', {})
-
-@login_required
 def student_record(request):
 
   allterms = Term.objects.all()
