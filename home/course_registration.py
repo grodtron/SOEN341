@@ -35,6 +35,45 @@ def fill_schedule_item_dict(item):
 
    return d
 
+def get_course_dict_from_group(group):
+   course_dict = {}
+
+   course_dict["course_info"] = {
+      "schedule_item_group_id" : group.row_id,
+      "course_id" : group.course.course_id,
+      "code"      : group.course.course_code,
+      "name"      : group.course.course_name,
+      "credits"   : float(group.course.course_credits)
+   }
+
+   try:
+      lecture = group.lecture
+   except ObjectDoesNotExist:
+      lecture = False
+
+   if lecture:
+      course_dict["lec"] = fill_schedule_item_dict(lecture)
+   
+   try:
+      tut = group.tutorial
+   except ObjectDoesNotExist:
+      tut = False
+
+   if tut:
+      course_dict["tut"] = fill_schedule_item_dict(tut)
+
+   try:
+      lab = group.lab
+   except ObjectDoesNotExist:
+      lab = False
+
+   if lab:
+      course_dict["lab"] = fill_schedule_item_dict(lab)
+   
+   return course_dict
+
+
+
 @login_required
 def get_registered_courses(request):
    schedule = StudentSchedule.objects.filter(user__exact=request.user)
@@ -46,43 +85,18 @@ def get_registered_courses(request):
    for group in groups:
       group = ScheduleItemGroup.objects.get(row_id=group)
 
-      course_dict = {}
-
-      course_dict["course_info"] = {
-         "schedule_item_group_id" : group.row_id,
-         "course_id" : group.course.course_id,
-         "code"      : group.course.course_code,
-         "name"      : group.course.course_name,
-         "credits"   : float(group.course.course_credits)
-      }
-
-      try:
-         lecture = group.lecture
-      except ObjectDoesNotExist:
-         lecture = False
-
-      if lecture:
-         course_dict["lec"] = fill_schedule_item_dict(lecture)
-      
-      try:
-         tut = group.tutorial
-      except ObjectDoesNotExist:
-         tut = False
-
-      if tut:
-         course_dict["tut"] = fill_schedule_item_dict(tut)
-
-      try:
-         lab = group.lab
-      except ObjectDoesNotExist:
-         lab = False
-
-      if lab:
-         course_dict["lab"] = fill_schedule_item_dict(lab)
-
-      courses.append(course_dict)
+      courses.append(get_course_dict_from_group(group))
 
    return json_response(200, list(courses))
+
+@login_required
+def get_course_section(request, section_id):
+   try:
+      group = ScheduleItemGroup.objects.get(row_id=section_id)
+   except ObjectDoesNotExist:
+      return json_response(404, {"error":"no such course"})
+
+   return json_response(200, get_course_dict_from_group(group))
 
 
 def get_schedule_items_for_schedule_item_group(group):

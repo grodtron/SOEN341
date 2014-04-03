@@ -75,26 +75,4 @@
 
 <script src="{% static "js/schedule.js" %}" type="text/javascript" ></script>
 
-<script type="text/javascript">
-   $(document).ready(function(){
-      
-      $(".btn-reg").bind("click", function(){
-
-         $.ajax("/register/do-add",
-         {
-            method:"POST",
-            data:{id:$(this).data("id")},
-            success:function(data){
-               alert("Success: " + data.success);
-            },
-            error:function(data){
-               alert("Error: " + data.responseJSON.error);
-            }
-         });
-
-      });
-
-   });
-</script>
-
 {% endblock %}

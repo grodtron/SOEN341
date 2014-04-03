@@ -6,29 +6,23 @@ $( document ).ready(function() {
 
    $("#calendar tbody").append(makeRows(startTime));
 
-   $.ajax("/register/get-courses",
-      {
-         dataType:"json",
-         success:function(data){
-            $.each(data, insertCourse);
-         }
-      });
+   function getTempCssClass(course){
+      return "temp-sched-group-" + course.course_info.schedule_item_group_id;
+   }
+   function getCssClass(course){
+      return "sched-group-" + course.course_info.schedule_item_group_id;
+   }
 
-});
+   var nextI = 0;
 
-function insertCourse(i, course){
-   console.log(course);
-   
-   var cssClass          = "sched-group-" + course.course_info.schedule_item_group_id;
-   var cssOverBackground = "hsl("+((75*i)%360)+",100%,40%)";
-   var cssOutBackground  = "hsl("+((75*i)%360)+",100%,75%)"
-   var cssOverColor      = "#FFF";
-   var cssOutColor       = "#000";
-   var iter_time = function(code){
+   // ABANDON HOPE ALL YE WHO ENTER HERE
+
+   var temporary_iter_func = function(i, code, course){
+      var cssClass          = getTempCssClass(course);
+      var cssBackground  = "hsl("+((75*nextI)%360)+",100%,75%)"
+      var cssColor       = "#000";
       return function(j, time){
          var el = insertItem(time.start, time.end, time.day);
-         console.log("Inserted: ");
-         console.log(el);
          var div = $("<div></div>")
             .css("display", "inline-block")
             .css("position", "relative")
@@ -37,14 +31,62 @@ function insertCourse(i, course){
             .append("<h3>"+course.course_info.code+"</h3>")
             .append("<p>"+code+"</p>");
 
-         var removeBtn = $("<a>x</a>")
+         el
+            .addClass(cssClass)
+            .data("start", time.start)
+            .data("day"  , time.day)
+            .css("background", cssBackground)
+            .css("color", cssColor)
+
+         el.append(div);
+      }
+   }
+
+   var permanent_iter_func = function(i, code, course){
+      var cssClass          = getCssClass(course);
+      var cssOverBackground = "hsl("+((75*nextI)%360)+",100%,40%)";
+      var cssOutBackground  = "hsl("+((75*nextI)%360)+",100%,75%)";
+      var cssOverColor      = "#FFF";
+      var cssOutColor       = "#000";
+      return function(j, time){
+         var el = insertItem(time.start, time.end, time.day);
+         var div = $("<div></div>")
+            .css("display", "inline-block")
+            .css("position", "relative")
+            .css("width", "100%")
+            .css("padding", "10px")
+            .append("<h3>"+course.course_info.code+"</h3>")
+            .append("<p>"+code+"</p>");
+
+         var removeBtn = $("<button type='button' class='close'>&times;</button>")
             .css("position","absolute")
             .css("top","10px")
-            .css("right","10px");
+            .css("right","10px")
+            .click(function(){
+               $.ajax("/register/do-remove",
+                  {
+                     method:"POST",
+                     data:{id:course.course_info.schedule_item_group_id},
+                     success:function(){
+                        $("."+cssClass).each(function(i){
+                           var day   = $(this).data("day");
+                           var start = $(this).data("start");
+                           removeItem(start, day);
+                        });
+                     },
+                     error:function(){
+                        alert("Error removing!");
+                     }
+                  });
+               });
+            
 
          div.append(removeBtn);
 
-         el.addClass(cssClass)
+         el
+            .addClass(cssClass)
+            .data("start", time.start)
+            .data("day"  , time.day)
             .css("background", cssOutBackground)
             .css("color", cssOutColor)
             .hover(
@@ -62,24 +104,114 @@ function insertCourse(i, course){
          el.append(div);
       }
    }
+   $.ajax("/register/get-courses",
+      {
+         dataType:"json",
+         success:function(data){
+            $.each(data, function(i, course){
+               iterateOverCourseTimes(i, course, permanent_iter_func);
+               ++nextI;
+            });
+         }
+      });
+
+   var course_dict = {}
+   var get_course_and_do = function(id, callback){
+      if(id in course_dict){
+         callback(course_dict[id]);
+      }else{
+         $.ajax("register/get-course/"+id,
+         {
+            success:function(data){
+               course_dict[id] = data;
+               callback(data);
+            }
+         });
+      }
+   }
+
+   $(".btn-reg").each(function(i){
+      $(this)
+         .hover(
+            function(event){
+               get_course_and_do($(this).data("id"), function(course){
+                  var canInsert = true;
+                  iterateOverCourseTimes(0, course, function(a,b,c){
+                     return function(i, time){
+                        if(!checkAvailability(time.start, time.end, time.day)){
+                           canInsert = false;
+                        }
+                     }
+                  });
+                  if(canInsert){
+                     iterateOverCourseTimes(0, course, temporary_iter_func);
+                  }
+               });
+            },
+            function(event){
+               get_course_and_do($(this).data("id"), function(course){
+                  var cssClass = getTempCssClass(course);
+                  $("."+cssClass).each(function(i){
+                     var day   = $(this).data("day");
+                     var start = $(this).data("start");
+                     removeItem(start, day);
+                  });
+               });
+            }
+         )
+         .click(function(event){
+            var id = $(this).data("id");
+            $.ajax("/register/do-add",
+            {
+               method:"POST",
+               data:{id:id},
+               success:function(data){
+                  get_course_and_do(id, function(course){
+                     var cssClass = getTempCssClass(course);
+                     $("."+cssClass).each(function(i){
+                        var day   = $(this).data("day");
+                        var start = $(this).data("start");
+                        removeItem(start, day);
+                     });
+                     iterateOverCourseTimes(0, course, permanent_iter_func);
+                     ++nextI;
+                  });
+               },
+               error:function(data){
+                  alert("Error: " + data.responseJSON.error);
+               }
+            });
+            
+         });
+   });
+
+});
+
+function iterateOverCourseTimes(i, course, iter_func){
 
    if("lec" in course){
-      $.each(course.lec.times, iter_time(
+      $.each(course.lec.times, iter_func(
+               i,
                "Lec - " +
-               course.lec.section));
+               course.lec.section,
+               course));
    }
    if("tut" in course){
-      $.each(course.tut.times, iter_time(
+      $.each(course.tut.times, iter_func(
+               i,
                "Tut - " +
                course.lec.section + " " +
-               course.tut.section));
+               course.tut.section,
+               course));
    }
    if("lab" in course){
-      $.each(course.lab.times, iter_time(
+      $.each(course.lab.times, iter_func(
+               i,
                "Lab - " +
                course.lec.section + " " +
                course.tut.section + " " +
-               course.lab.section));
+               course.lab.section,
+               course));
    }
 }
 
@@ -187,6 +319,12 @@ String.prototype.lpad = function(padString, length) {
     return str;
 }
 
+function normalizeTime(time){
+   time = time.split(':');
+   time = time[0] + ':' + String(Math.round(time[1]/15)*15).lpad("0",2);
+   return time;
+}
+
 // Inserts a class into schedule at day with prescribed start and end times
 function insertItem( startTime, endTime, day ){
    // Create map from day to column
@@ -202,11 +340,9 @@ function insertItem( startTime, endTime, day ){
    });
 
    // Round to nearest 15 minutes:
-   startTime = startTime.split(':');
-   startTime = startTime[0] + ':' + String(Math.round(startTime[1]/15)*15).lpad("0",2);
+   startTime = normalizeTime(startTime);
    // Round to nearest 15 minutes:
-   endTime = endTime.split(':');
-   endTime = endTime[0] + ':' + String(Math.round(endTime[1]/15)*15).lpad("0",2);
+   endTime = normalizeTime(endTime);
 
 
    // Set parameter to remove needed td
@@ -254,6 +390,10 @@ function removeItem(startTime , day){
    // Remove rowspan attribute
    $(".scheduleContainer tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")")
       .removeAttr("rowspan")
+      .removeAttr("style")
+      .removeClass()
+      .addClass("defaultClass")
+      .off( "mouseenter mouseleave" )
       .empty(); // clear out the content of the element
 }
 
@@ -284,6 +424,8 @@ function available(time , day){
 
 // Check if all time slots are available
 function checkAvailability(startTime , endTime , day){
+   startTime = normalizeTime(startTime);
+   endTime   = normalizeTime(endTime);
    // If all time slots where available
    if (startTime == increaseTime(endTime)){
       return true;
