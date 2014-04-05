@@ -25,7 +25,7 @@ $( document ).ready(function() {
          var el = insertItem(time.start, time.end, time.day);
          var div = $("<div></div>")
             .css("display", "inline-block")
-            .css("position", "relative")
+            .css("position", "relative")  
             .css("width", "100%")
             .css("padding", "10px")
             .append("<h3>"+course.course_info.code+"</h3>")
@@ -50,18 +50,20 @@ $( document ).ready(function() {
       var cssOutColor       = "#000";
       return function(j, time){
          var el = insertItem(time.start, time.end, time.day);
-         var div = $("<div></div>")
-            .css("display", "inline-block")
+         var div = $("<div class='container-fluid'></div>")
+            .css("display" , "inline-block")
             .css("position", "relative")
             .css("width", "100%")
-            .css("padding", "10px")
-            .append("<h3>"+course.course_info.code+"</h3>")
-            .append("<p>"+code+"</p>");
+            .css("padding", "0px")
+            .css("vertical-align", "middle")
+            .append("<h3 class='text-center noMargin'>"+course.course_info.code+"</h3>")
+            .append("<p class='text-center noMargin'>"+code+"</p>");
 
          var removeBtn = $("<button type='button' class='close'>&times;</button>")
             .css("position","absolute")
             .css("top","10px")
             .css("right","10px")
+            .css("z-index", "9999")
             .click(function(){
                $.ajax("/register/do-remove",
                   {
@@ -81,7 +83,7 @@ $( document ).ready(function() {
                });
             
 
-         div.append(removeBtn);
+         el.append(removeBtn);
 
          el
             .addClass(cssClass)
@@ -360,6 +362,8 @@ function insertItem( startTime, endTime, day ){
    // Change rowspan of selected td
    var td = $(".scheduleContainer tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")");
    td.attr("rowspan" , nmbrOfRows);
+   td.css("vertical-align", "middle");
+   td.css("position" , "relative");
 
    // Return the td so that we can manipulate it
    return td;

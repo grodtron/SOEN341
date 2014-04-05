@@ -253,3 +253,10 @@ col.button-col{
 	padding-right:0px;
 }
 
+.noMargin{
+	margin:0px;
+}
+
+.vAlign{
+	vertical-align: middle;
+}
