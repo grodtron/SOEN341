@@ -27,9 +27,10 @@ $( document ).ready(function() {
             .css("display", "inline-block")
             .css("position", "relative")  
             .css("width", "100%")
-            .css("padding", "10px")
-            .append("<h3>"+course.course_info.code+"</h3>")
-            .append("<p>"+code+"</p>");
+            .css("padding", "0px")
+            .css("vertical-align" , "middle")
+            .append("<h3 class='text-center noMargin'>"+course.course_info.code+"</h3>")
+            .append("<p class='text-center noMargin'>"+code+"</p>");
 
          el
             .addClass(cssClass)
