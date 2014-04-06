@@ -257,6 +257,6 @@ col.button-col{
 	margin:0px;
 }
 
-.vAlign{
-	vertical-align: middle;
+.zTop{
+	z-index:9999999;
 }
