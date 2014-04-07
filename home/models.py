@@ -162,3 +162,7 @@ class StudentSchedule(models.Model):
     user                = models.ForeignKey(User)
     schedule_item_group = models.ForeignKey(ScheduleItemGroup)
 
+class ForgotPasswordCode(models.Model):
+    user                = models.ForeignKey(User, unique=True)
+    code                = models.CharField(max_length=8, unique=True)
+

@@ -88,3 +88,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = './static/'
+
+
+FORGOT_PW_EMAIL_USER="wizreg_noreply2"
+FORGOT_PW_EMAIL_PASS='MG#p$^O\\\\Bb<x6\\\\0Ezkh\\\\Vk_Q[-d;Kl{B'
+FORGOT_PW_EMAIL_SERVER="smtp.webfaction.com"
+FORGOT_PW_EMAIL_FROMADDR="noreply@wizreg.char1es.webfactional.com"

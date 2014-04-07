@@ -21,6 +21,10 @@ urlpatterns = patterns('',
     url(r'^do-register$', 'home.login.do_register', name='do register'),
     url(r'^edit-student-record$', 'home.views.edit_student_record' , name='edit-student-record'),
 
+    url(r'^reset-password/([a-zA-Z0-9]{8})/.*$', 'home.login.reset_password', name='reset password'),
+    url(r'^do-forgot-password$', 'home.login.do_forgot_password', name='do forgot password email'),
+    url(r'^do-reset-password$', 'home.login.do_reset_password', name='do reset password email'),
+
     url(r'^schedule$', 'home.shopping_cart.shopping_cart', name='shopping cart'),
     url(r'^shopping-cart/do-add$', 'home.shopping_cart.add', name='shopping cart add'),
     url(r'^shopping-cart/do-remove$', 'home.shopping_cart.remove', name='shopping cart remove'),
