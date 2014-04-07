@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from home.models import ShoppingCart, Course, StudentSchedule, ScheduleItemGroup, ScheduleItemTime
 
 def json_response(code, data):
-   return HttpResponse(json.dumps(data), status=code, content_type="application/json")
+   return HttpResponse(json.dumps(data, sort_keys=True), status=code, content_type="application/json")
 
 def fill_schedule_item_dict(item):
 
@@ -87,7 +87,7 @@ def get_registered_courses(request):
 
       courses.append(get_course_dict_from_group(group))
 
-   return json_response(200, list(courses))
+   return json_response(200, courses)
 
 @login_required
 def get_course_section(request, section_id):
