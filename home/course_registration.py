@@ -180,6 +180,15 @@ def register_for_course(request):
                # TODO - indicate the conflicting class
                return json_response(409, {"error" : "there is a conflict"})
 
+      curr_classes = StudentSchedule.objects.select_related(
+         'schecule_item_group.course'
+      ).filter(user__exact=request.user)
+
+      curr_classes = map(lambda x: x.schedule_item_group.course_id, curr_classes)
+
+      if requested_group.course_id in curr_classes:
+         return json_response(409, {"error":"you are already registered for this class"})
+
       # Here we have checked for conflicts and there's none, so we'll move on
 
       StudentSchedule.objects.create(
