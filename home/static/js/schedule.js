@@ -1,5 +1,6 @@
 // Create Schedule Table
 $( document ).ready(function() {
+
    var startTime = "8:45";
 
    $("#calendar thead").append(makeHead())
@@ -24,11 +25,8 @@ $( document ).ready(function() {
       return function(j, time){
          var el = insertItem(time.start, time.end, time.day);
          var div = $("<div></div>")
-            .css("display", "inline-block")
-            .css("position", "relative")  
             .css("width", "100%")
             .css("padding", "0px")
-            .css("vertical-align" , "middle")
             .append("<h3 class='text-center noMargin'>"+course.course_info.code+"</h3>")
             .append("<p class='text-center noMargin'>"+code+"</p>");
 
@@ -38,6 +36,7 @@ $( document ).ready(function() {
             .data("day"  , time.day)
             .css("background", cssBackground)
             .css("color", cssColor)
+            .css("vertical-align" , "middle");
 
          el.append(div);
       }
@@ -50,19 +49,22 @@ $( document ).ready(function() {
       var cssOverColor      = "#FFF";
       var cssOutColor       = "#000";
       return function(j, time){
+
          var el = insertItem(time.start, time.end, time.day);
-         var div = $("<div class='container-fluid'></div>")
-            .css("display" , "inline-block")
-            .css("position", "relative")
+
+         var xDiv =$("<div id='xDiv'></div>")
+            .css("position" , "relative")
+            .css("top" , "0px");
+
+         var div = $("<div id='textDiv'></div>")
             .css("width", "100%")
             .css("padding", "0px")
-            .css("vertical-align", "middle")
             .append("<h3 class='text-center noMargin'>"+course.course_info.code+"</h3>")
             .append("<p class='text-center noMargin'>"+code+"</p>");
 
          var removeBtn = $("<button type='button' class='close'>&times;</button>")
-            .css("position","absolute")
-            .css("top","10px")
+            .css("position", "absolute")
+            .css("top", "10px")
             .css("right","10px")
             .css("z-index", "9999")
             .click(function(){
@@ -82,9 +84,11 @@ $( document ).ready(function() {
                      }
                   });
                });
-            
 
-         el.append(removeBtn);
+         xDiv.append(removeBtn);
+         el.append(xDiv);
+         el.append(div);
+         
 
          el
             .addClass(cssClass)
@@ -104,7 +108,7 @@ $( document ).ready(function() {
                      .css("color", cssOutColor);
                });
 
-         el.append(div);
+         adjustDiv();
       }
    }
    $.ajax("/register/get-courses",
@@ -189,6 +193,35 @@ $( document ).ready(function() {
    });
 
 });
+
+function adjustDiv(){
+   // Array to store needed height values
+   var divHeight = [];
+   var textHeight = [];
+
+   // Get each div height into array
+   $.each($("td[rowspan]"), function(){
+      divHeight.push($(this).height());
+   });
+
+   // Get each text height into array
+   $.each($("div #textDiv"), function(){
+      textHeight.push($(this).height());
+   });
+
+   var i=0;
+   // Inject new margin into div elements
+   $.each($("div #textDiv") , function(){
+      $(this).css("margin-top" , getOffset(divHeight[i], textHeight[i++]));
+   });
+}
+
+function getOffset(divHeight , textHeight){
+      
+      var availableSpace = divHeight - textHeight;
+
+      return (availableSpace/2)+"px";
+}
 
 function iterateOverCourseTimes(i, course, iter_func){
 
@@ -363,7 +396,6 @@ function insertItem( startTime, endTime, day ){
    // Change rowspan of selected td
    var td = $(".scheduleContainer tbody tr:eq("+startToIndex[startTime]+") td:eq("+dayToIndex[day]+")");
    td.attr("rowspan" , nmbrOfRows);
-   td.css("vertical-align", "middle");
    td.css("position" , "relative");
 
    // Return the td so that we can manipulate it
@@ -443,4 +475,6 @@ function checkAvailability(startTime , endTime , day){
    else{
       return false;
    }		
+
+
 }
