@@ -357,7 +357,7 @@ String.prototype.lpad = function(padString, length) {
 
 function normalizeTime(time){
    time = time.split(':');
-   time = time[0] + ':' + String(Math.round(time[1]/15)*15).lpad("0",2);
+   time = time[0] + ':' + String((Math.ceil(time[1]/15)*15)%60).lpad("0",2);
    return time;
 }
 
