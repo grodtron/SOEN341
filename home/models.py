@@ -9,7 +9,7 @@ class Program(models.Model):
     program_name    = models.CharField(max_length=32)
     program_credits = models.IntegerField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'programs'
 
 class Course(models.Model):
@@ -18,9 +18,9 @@ class Course(models.Model):
     course_name    = models.CharField(max_length=255, blank=True)
     course_credits = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
     description    = models.CharField(max_length=1200, blank=True)
-    program        = models.ForeignKey(Program)
+    program_id     = models.IntegerField()#Program)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'courses'
 
 class ShoppingCart(models.Model):
@@ -33,14 +33,14 @@ class CourseRequisites(models.Model):
     requisite_course    = models.ForeignKey(Course, related_name='+')
     prerequisite        = models.BooleanField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'course_requisites'
 
 class Term(models.Model):
     term_id = models.IntegerField(primary_key=True)
     term_name = models.CharField(max_length=16)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'terms'
 
 
@@ -53,7 +53,7 @@ class CourseSequence(models.Model):
     course     = models.ForeignKey(Course)
     core       = models.BooleanField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'course_sequences'
 
 class CourseTerm(models.Model):
@@ -62,14 +62,14 @@ class CourseTerm(models.Model):
     course_term    = models.ForeignKey(Term)
     year           = models.IntegerField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'course_terms'
 
 class Day(models.Model):
     day_id = models.IntegerField(primary_key=True)
     day_name = models.CharField(max_length=16)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'days'
 
 # @Charles - can you please verify that this table's primary key is correct,
@@ -79,7 +79,7 @@ class Grade(models.Model):
     grade       = models.CharField(primary_key=True, max_length=3)
     point_value = models.IntegerField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'grades'
 
 
@@ -90,7 +90,7 @@ class Instructor(models.Model):
     instructor_email  = models.CharField(max_length=32)
     instructor_rating = models.DecimalField(max_digits=10, decimal_places=0)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'instructors'
 
 
@@ -99,7 +99,7 @@ class Location(models.Model):
     campus      = models.CharField(max_length=3)
     room_number = models.CharField(max_length=16)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'locations'
 
 
@@ -107,7 +107,7 @@ class ScheduleItemType(models.Model):
     item_type_id   = models.IntegerField(primary_key=True)
     item_type_name = models.CharField(max_length=7)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'schedule_item_types'
 
 
@@ -119,30 +119,30 @@ class ScheduleItem(models.Model):
     instructor       = models.ForeignKey(Instructor)
     location         = models.ForeignKey(Location)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'schedule_items'
 
 
 class ScheduleItemGroup(models.Model):
     row_id      = models.IntegerField(primary_key=True)
-    course      = models.OneToOneField(Course)
-    term        = models.OneToOneField(Term)
-    lecture     = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
-    tutorial    = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
-    lab         = models.OneToOneField(ScheduleItem, blank=True, null=True, related_name='+')
+    course      = models.ForeignKey(Course)
+    term        = models.ForeignKey(Term)
+    lecture     = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    tutorial    = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
+    lab         = models.ForeignKey(ScheduleItem, blank=True, null=True, related_name='+')
     class Meta:
-        managed = False
+        managed = True
         db_table = 'schedule_item_groups'
 
 
 class ScheduleItemTime(models.Model):
     row_id           = models.IntegerField(primary_key=True)
-    schedule_item    = models.OneToOneField(ScheduleItem)
-    day              = models.OneToOneField(Day)
+    schedule_item    = models.ForeignKey(ScheduleItem)
+    day              = models.ForeignKey(Day)
     start            = models.TimeField()
     end              = models.TimeField()
     class Meta:
-        managed = False
+        managed = True
         db_table = 'schedule_item_times'
 
 class StudentRecord(models.Model):
@@ -154,11 +154,15 @@ class StudentRecord(models.Model):
     course_number = models.CharField(max_length=7)
     grade = models.CharField(max_length=3)
     class Meta:
-        managed = False
+        managed = True
         db_table = 'student_records'
 
 
 class StudentSchedule(models.Model):
     user                = models.ForeignKey(User)
     schedule_item_group = models.ForeignKey(ScheduleItemGroup)
+
+class ForgotPasswordCode(models.Model):
+    user                = models.ForeignKey(User, unique=True)
+    code                = models.CharField(max_length=8, unique=True)
 
